@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "nombre": "Cancha A",
+    "horasReservadas": {
+      "2025-08-03": [2, 3, 5]
+    },
+    "horaInicio": 10,
+    "horaFin": 22 
+  },
+  {
+    "id": 1,
+    "nombre": "Cancha B",
+    "horasReservadas": {
+      "2025-08-03": [1, 4, 6]
+    },
+    "horaInicio": 7,
+    "horaFin": 17
+  },
+  {
+    "id": 3,
+    "nombre": "Cancha C",
+    "horasReservadas": {
+      "2025-08-03": [12, 9, 6]
+    },
+    "horaInicio": 7,
+    "horaFin": 19
+  }
+]
