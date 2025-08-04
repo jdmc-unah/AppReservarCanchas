@@ -1,5 +1,6 @@
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -18,11 +19,10 @@ class Login extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image(
-                image: AssetImage('assets/imagenes/fondo_login.jpg'),
-                fit: BoxFit.contain,
-              ),
-
+              // Image(
+              //   image: AssetImage('assets/imagenes/fondo_login.jpg'),
+              //   fit: BoxFit.contain,
+              // ), //no cabe causa error de overflow
               SizedBox(height: 20),
 
               Text(
@@ -63,7 +63,9 @@ class Login extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed('inicio');
+                  },
                   child: Text('Iniciar Sesión'),
                 ),
               ),

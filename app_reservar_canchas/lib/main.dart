@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
           ),
 
           GoRoute(
-            name: 'home',
-            path: '/home',
+            name: 'inicio',
+            path: '/inicio',
             builder: (context, state) {
               return PaginaInicio();
             },
