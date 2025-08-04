@@ -1,5 +1,6 @@
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
 import 'package:app_reservar_canchas/vistas/pagina_inicio.dart';
+import 'package:app_reservar_canchas/vistas/vistas_login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      // home: PaginaInicio()
       debugShowCheckedModeBanner: false,
       routerConfig: GoRouter(
         initialLocation: '/login',
