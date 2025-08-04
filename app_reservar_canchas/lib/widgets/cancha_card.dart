@@ -36,8 +36,8 @@ class CanchaCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              stackImgNameFav(),
-              _ubicacion(),
+              stackImgNameFav(cancha),
+              _ubicacionRating(cancha: cancha),
 
               ListaHoras(canchaId: canchaId),
               SizedBox(height: 10),
@@ -305,8 +305,9 @@ class _fechaActualTxt extends StatelessWidget {
   }
 }
 
-class _ubicacion extends StatelessWidget {
-  const _ubicacion({super.key});
+class _ubicacionRating extends StatelessWidget {
+  _ubicacionRating({required this.cancha});
+  Cancha cancha;
 
   @override
   Widget build(BuildContext context) {
@@ -317,13 +318,13 @@ class _ubicacion extends StatelessWidget {
           Icon(Icons.location_on_outlined, size: 17),
           SizedBox(width: 4),
           Text(
-            "Ubicacion",
+            cancha.ubicacion,
             style: TextStyle(fontSize: 17),
           ), //Variable ubicacion
           Spacer(),
-          SizedBox(width: 105),
+          //SizedBox(width: 105),
           RatingBarIndicator(
-            rating: 3.5, //Variable rating
+            rating: cancha.rating, //Variable rating
             itemCount: 5,
             itemSize: 18,
             direction: Axis.horizontal,
@@ -367,60 +368,48 @@ class _ubicacion extends StatelessWidget {
 //   }
 // }
 
-Stack stackImgNameFav() {
+Stack stackImgNameFav(Cancha cancha) {
   //Widget stack permite poder sobreponer un widget sobre otro; como lo podemos suponer por su nombre.
   return Stack(
+    alignment: Alignment.bottomLeft,
     children: [
       Image.network(
-        //variable imagen
         "https://media.istockphoto.com/id/1176735816/photo/blue-tennis-court-and-illuminated-indoor-arena-with-fans-upper-front-view.jpg?s=1024x1024&w=is&k=20&c=u4i72shR1eXzojkcsVRPf4HdqakcOg2Mo0ucuaFtvXo=",
         fit: BoxFit.cover,
         width: double.infinity,
         height: 160,
       ),
-      //Widget con la funcion de ser posicional en la pantalla.
-      Positioned(
-        top: 130,
-        left: 5,
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.transparent, Colors.black],
+          ),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Titulo de la cancha", //variable titulo
+              "${cancha.nombre}",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    blurRadius: 6,
-                    color: Colors.black,
-                    offset: Offset(1, 1),
-                  ),
-                ],
               ),
             ),
-            SizedBox(width: 110),
-            // RatingBarIndicator(
-            //   rating: 3.5, //Variable rating
-            //   itemCount: 5,
-            //   itemSize: 18,
-            //   direction: Axis.horizontal,
-            //   itemBuilder: (context, index) =>
-            //       Icon(Icons.star, color: Colors.amber),
-            // ),
             Text(
-              "LPS 200", //variable precio
+              'LPS ${cancha.precio}',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    blurRadius: 6,
-                    color: Colors.black,
-                    offset: Offset(1, 1),
-                  ),
-                ],
               ),
             ),
           ],

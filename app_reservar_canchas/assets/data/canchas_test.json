@@ -6,7 +6,10 @@
       "2025-08-03": [2, 3, 5]
     },
     "horaInicio": 10,
-    "horaFin": 22 
+    "horaFin": 22, 
+    "precio": 1200,
+    "ubicacion": "San Pedro Sula",
+    "rating": 4.6
   },
   {
     "id": 1,
@@ -15,7 +18,10 @@
       "2025-08-03": [1, 4, 6]
     },
     "horaInicio": 7,
-    "horaFin": 17
+    "horaFin": 17,
+    "precio": 200,
+    "ubicacion": "La Lima",
+    "rating": 4.0
   },
   {
     "id": 3,
@@ -24,6 +30,9 @@
       "2025-08-03": [12, 9, 6]
     },
     "horaInicio": 7,
-    "horaFin": 19
+    "horaFin": 19, 
+    "precio": 200,
+    "ubicacion": "El Progeso",
+    "rating": 3.5
   }
 ]
