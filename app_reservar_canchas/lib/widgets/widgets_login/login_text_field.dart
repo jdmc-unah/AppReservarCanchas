@@ -52,6 +52,8 @@ class _LoginTextFieldState extends State<LoginTextField> {
               : false, //si activar suffix fuese nulo entonces por defecto va a mostrar lo que se escribe siempre
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white30,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             hintText: widget.hintText,
             prefixIcon: Icon(widget.prefixIcon),
