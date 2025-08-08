@@ -29,7 +29,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   go_router: ^16.1.0
+
   firebase_auth: ^6.0.0
+  firebase_core: ^4.0.0
+
+  get_storage: ^2.1.1
+  get: ^4.7.2
 
   flutter:
     sdk: flutter
@@ -39,8 +44,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_rating_bar: ^4.0.1
   intl: ^0.20.2
-  get: ^4.7.2
-  firebase_core: ^4.0.0
 
 dev_dependencies:
   flutter_test:

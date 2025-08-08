@@ -1,6 +1,9 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class informacion_usuario extends StatelessWidget {
   informacion_usuario({super.key});
@@ -27,8 +30,13 @@ class informacion_usuario extends StatelessWidget {
             PopupMenuItem(
               value: 0,
               child: Text("Cerrar Sesión"),
-              onTap: () {
+              onTap: () async {
+                await AuthService().cerrarSesion();
+                GetStorage().write('sesionIniciada', false);
                 validacionController.cargando = false;
+
+                if (!context.mounted) return;
+                context.goNamed('login');
               },
             ),
           ],

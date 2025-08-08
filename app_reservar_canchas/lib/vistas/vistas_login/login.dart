@@ -3,6 +3,7 @@ import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class Login extends StatelessWidget {
@@ -95,10 +96,10 @@ class Login extends StatelessWidget {
 
                         if (validacionController.error == false) {
                           if (!context.mounted) return;
+                          GetStorage().write('sesionIniciada', true);
                           context.goNamed('inicio');
                         } else {
                           validacionController.cargando = false;
-
                           if (!context.mounted) return;
                           ValidacionesDeAcceso.mostrarSnackBar(
                             context,
