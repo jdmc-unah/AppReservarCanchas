@@ -1,4 +1,4 @@
-import 'package:app_reservar_canchas/metodos_especiales/metodos_especiales_login/valida_login.dart';
+import 'package:app_reservar_canchas/metodos_especiales/metodos_especiales_login/validaciones_de_acceso.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -79,24 +79,19 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      String error = validaInicioSesion(
+                      String? error = ValidacionesDeAcceso.validaInicioSesion(
                         emailController.text,
                         pwController.text,
                       );
 
-                      if (error == '') {
-                        Map<String, String> data = usuarios[0];
-                        context.goNamed('inicio', extra: data);
+                      if (error == null) {
+                        context.goNamed('inicio');
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red,
-                            action: SnackBarAction(
-                              label: 'Cerrar',
-                              onPressed: () {},
-                            ),
-                            content: Text(error),
-                          ),
+                        ValidacionesDeAcceso.mostrarSnackBar(
+                          context,
+                          error,
+                          true,
+                          () {},
                         );
                       }
                     },

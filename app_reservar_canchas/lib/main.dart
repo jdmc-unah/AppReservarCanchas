@@ -1,14 +1,21 @@
+import 'package:flutter/material.dart';
+
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+
 import 'package:app_reservar_canchas/vistas/pagina_inicio.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/login.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/registro.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:app_reservar_canchas/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Get.put(ReservasControlador());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(MyApp());
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95879807730",
+    "project_id": "bookandplayapp-39926",
+    "storage_bucket": "bookandplayapp-39926.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95879807730:android:4195013d211c251116c66b",
+        "android_client_info": {
+          "package_name": "com.example.app_reservar_canchas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKFj9wyCH1rygfUbHlbXcuDi6bb-rz7vI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

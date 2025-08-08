@@ -1,4 +1,4 @@
-import 'package:app_reservar_canchas/metodos_especiales/metodos_especiales_login/valida_registro.dart';
+import 'package:app_reservar_canchas/metodos_especiales/metodos_especiales_login/validaciones_de_acceso.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -81,48 +81,28 @@ class Registro extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    String error = validaRegistro(
+                    String? error = ValidacionesDeAcceso.validaRegistro(
                       userController.text,
                       emailController.text,
                       phoneController.text,
                       pwController.text,
                     );
 
-                    if (error == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: const Color.fromARGB(
-                            255,
-                            18,
-                            169,
-                            56,
-                          ),
-
-                          action: SnackBarAction(
-                            label: 'Continuar al login',
-                            onPressed: () {
-                              context.goNamed('login');
-                            },
-                          ),
-                          content: Text(
-                            'Se guardo el usuario con éxito',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                    if (error == null) {
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        'Ingresar a la app',
+                        false,
+                        () {
+                          context.goNamed('inicio');
+                        },
                       );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          action: SnackBarAction(
-                            label: 'Cerrar',
-                            onPressed: () {},
-                          ),
-                          content: Text(
-                            error,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        error,
+                        true,
+                        () {},
                       );
                     }
                   },
