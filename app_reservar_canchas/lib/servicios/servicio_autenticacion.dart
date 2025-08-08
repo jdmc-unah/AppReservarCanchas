@@ -1,48 +1,79 @@
+import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
-
-  Future<User?> registroUsuario(String correo, String contra) async {
+  final validacionController = Get.put<ValidacionesDeAcceso>(
+    ValidacionesDeAcceso(),
+  );
+  Future<String> registroUsuario(
+    String nombre,
+    String correo,
+    String telefono,
+    String contra,
+  ) async {
     try {
-      print('${correo}, ${contra}');
+      // print('${correo}, ${contra}');
+
+      String? errorInterno = ValidacionesDeAcceso.validaRegistro(
+        nombre,
+        correo,
+        telefono,
+        contra,
+      );
+
+      if (errorInterno != null) {
+        validacionController.error = true;
+        return errorInterno;
+      }
 
       final cred = await _auth.createUserWithEmailAndPassword(
         email: correo,
         password: contra,
       );
+      validacionController.error = false;
 
-      return cred.user;
+      return cred.user!.email.toString();
     } on FirebaseAuthException catch (e) {
-      manejarExcepciones(e.code);
+      validacionController.error = true;
+      return manejaExepcionFireBase(e.code);
     }
-    return null;
   }
 
-  Future<User?> inicioSesionUsuario(String correo, String contra) async {
+  Future<String> inicioSesionUsuario(String correo, String contra) async {
     try {
+      //Hace validacion interna
+      final errorInterno = ValidacionesDeAcceso.validaInicioSesion(
+        correo,
+        contra,
+      );
+
+      if (errorInterno != null) {
+        validacionController.error = true;
+        return errorInterno;
+      }
+
+      //Intenta inicio de sesion
       final cred = await _auth.signInWithEmailAndPassword(
         email: correo,
         password: contra,
       );
 
-      return cred.user;
+      validacionController.error = false;
+      return cred.user!.email.toString();
     } on FirebaseAuthException catch (e) {
-      manejarExcepciones(e.code);
+      validacionController.error = true;
+      return manejaExepcionFireBase(e.code);
     }
-    return null;
   }
 
   Future<void> cerrarSesion() async {
-    try {
-      await _auth.signOut();
-    } on FirebaseAuthException catch (e) {
-      manejarExcepciones(e.code);
-    }
+    await _auth.signOut();
   }
 
-  String? manejarExcepciones(String codigo) {
-    String? error;
+  static String manejaExepcionFireBase(String codigo) {
+    String error;
 
     switch (codigo) {
       case 'email-already-in-use':

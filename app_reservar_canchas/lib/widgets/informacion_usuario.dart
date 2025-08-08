@@ -1,7 +1,13 @@
+import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class informacion_usuario extends StatelessWidget {
-  const informacion_usuario({super.key});
+  informacion_usuario({super.key});
+
+  final validacionController = Get.put<ValidacionesDeAcceso>(
+    ValidacionesDeAcceso(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +24,13 @@ class informacion_usuario extends StatelessWidget {
           ),
           itemBuilder: (context) => [
             PopupMenuItem(value: 0, child: Text("Informacion")),
-            PopupMenuItem(value: 0, child: Text("Informacion")),
+            PopupMenuItem(
+              value: 0,
+              child: Text("Cerrar Sesión"),
+              onTap: () {
+                validacionController.cargando = false;
+              },
+            ),
           ],
         ),
       ),

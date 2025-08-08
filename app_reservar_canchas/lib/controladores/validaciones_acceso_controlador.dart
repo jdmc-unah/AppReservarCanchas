@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ValidacionesDeAcceso {
+class ValidacionesDeAcceso extends GetxController {
+  //*Variables globales para validar error
+
+  final _error = true.obs;
+
+  set error(bool hayError) {
+    _error.value = hayError;
+  }
+
+  bool get error => _error.value;
+
+  //*
+  final _cargando = false.obs;
+
+  set cargando(bool estaCargando) {
+    _cargando.value = estaCargando;
+  }
+
+  bool get cargando => _cargando.value;
+
+  //* METODOS
   static String? validaRegistro(
     String nombre,
     String correo,
@@ -20,11 +41,6 @@ class ValidacionesDeAcceso {
         return 'ERROR: El campo ${param.key} no puede estar vacío';
       }
     }
-
-    // //Valida longitud del correo
-    // if (correo.length < 10) {
-    //   return 'ERROR: El correo debe tener mas de 10 caracteres ';
-    // }
 
     //Valida longitud del telefono
     if (telefono.length != 8) {

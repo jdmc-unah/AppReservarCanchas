@@ -16,6 +16,7 @@ void main() async {
 
   Get.put(ReservasControlador());
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await GetStorage.init();
 
   runApp(MyApp());
 }
