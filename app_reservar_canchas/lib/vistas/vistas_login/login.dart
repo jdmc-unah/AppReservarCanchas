@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/metodos_especiales/metodos_especiales_login/validaciones_de_acceso.dart';
+import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,9 +7,10 @@ import 'package:go_router/go_router.dart';
 class Login extends StatelessWidget {
   Login({super.key});
 
-  final emailController = TextEditingController();
+  final _auth = AuthService();
 
-  final pwController = TextEditingController();
+  final _correo = TextEditingController();
+  final _contra = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +31,6 @@ class Login extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image(
-                //   image: AssetImage('assets/imagenes/fondo_login.jpg'),
-                //   fit: BoxFit.contain,
-                // ), //no cabe causa error de overflow
                 SizedBox(height: 20),
 
                 Text(
@@ -53,7 +51,7 @@ class Login extends StatelessWidget {
                   prefixIcon: Icons.email_outlined,
                   topText: 'Correo ',
                   hintText: 'Ingrese su correo',
-                  controller: emailController,
+                  controller: _correo,
                 ),
 
                 SizedBox(height: 10),
@@ -63,7 +61,7 @@ class Login extends StatelessWidget {
                   topText: 'Contraseña ',
                   hintText: 'Ingrese su contraseña',
                   activarSuffix: true,
-                  controller: pwController,
+                  controller: _contra,
                 ),
 
                 SizedBox(height: 30),
@@ -80,8 +78,8 @@ class Login extends StatelessWidget {
                     ),
                     onPressed: () {
                       String? error = ValidacionesDeAcceso.validaInicioSesion(
-                        emailController.text,
-                        pwController.text,
+                        _correo.text,
+                        _contra.text,
                       );
 
                       if (error == null) {

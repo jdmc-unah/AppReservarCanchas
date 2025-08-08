@@ -21,10 +21,10 @@ class ValidacionesDeAcceso {
       }
     }
 
-    //Valida longitud del correo
-    if (correo.length < 10) {
-      return 'ERROR: El correo debe tener mas de 10 caracteres ';
-    }
+    // //Valida longitud del correo
+    // if (correo.length < 10) {
+    //   return 'ERROR: El correo debe tener mas de 10 caracteres ';
+    // }
 
     //Valida longitud del telefono
     if (telefono.length != 8) {
@@ -54,9 +54,6 @@ class ValidacionesDeAcceso {
   }
 
   static String? validaInicioSesion(String correo, String contra) {
-    // bool credencialesCorrectas = false;
-    // String error = '';
-
     //Valida que todos los campos esten llenos
     Map<String, String> params = {'correo': correo, 'contrasena': contra};
 
@@ -65,15 +62,6 @@ class ValidacionesDeAcceso {
         return 'ERROR: El campo ${param.key} no puede estar vacío';
       }
     }
-
-    // //Valida que el correo y la contraseña sean correctos
-    // for (var usuario in usuarios) {
-    //   if (usuario["correo"] == correo && usuario["contrasena"] == contra) {
-    //     credencialesCorrectas = true;
-    //   } else {
-    //     error = 'ERROR: Correo o contraseña incorrecta. \nIntente de nuevo.';
-    //   }
-    // }
 
     return null;
   }
