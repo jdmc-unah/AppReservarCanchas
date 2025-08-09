@@ -32,8 +32,6 @@ class informacion_usuario extends StatelessWidget {
               child: Text("Cerrar Sesión"),
               onTap: () async {
                 await AuthService().cerrarSesion();
-                GetStorage().write('sesionIniciada', false);
-                validacionController.cargando = false;
 
                 if (!context.mounted) return;
                 context.goNamed('login');

@@ -12,7 +12,20 @@
           "package_name": "com.example.app_reservar_canchas"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "95879807730-an4a5crm7l9mhvs9htlc7bebi6adpirv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_reservar_canchas",
+            "certificate_hash": "5250e734f1ad24961029ac0ff4c78d3862f57298"
+          }
+        },
+        {
+          "client_id": "95879807730-lin7llr10d4ubtn0d93l77v53hf1kfkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBKFj9wyCH1rygfUbHlbXcuDi6bb-rz7vI"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95879807730-lin7llr10d4ubtn0d93l77v53hf1kfkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

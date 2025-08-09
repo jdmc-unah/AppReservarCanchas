@@ -20,17 +20,16 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/imagenes/fondo_login3.jpg",
-              ), // Ruta de tu imagen
-              fit: BoxFit.fill, // Ajusta la imagen al tamaño del contenedor
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/imagenes/fondo_login3.jpg", //TODO: arreglar fondo
+              fit: BoxFit.cover,
             ),
           ),
-          child: Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Obx(() {
               if (validacionController.cargando) {
@@ -40,8 +39,7 @@ class Login extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
-
+                  SizedBox(height: 40),
                   Text(
                     'Bienvenido !',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -74,7 +72,6 @@ class Login extends StatelessWidget {
                   ),
 
                   SizedBox(height: 30),
-
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -88,43 +85,74 @@ class Login extends StatelessWidget {
                       onPressed: () async {
                         validacionController.cargando = true;
 
-                        String? response;
-                        response = await _auth.inicioSesionUsuario(
+                        String? response = await _auth.inicioSesionUsuario(
                           _correo.text,
                           _contra.text,
                         );
 
-                        if (validacionController.error == false) {
-                          if (!context.mounted) return;
-                          GetStorage().write('sesionIniciada', true);
-                          context.goNamed('inicio');
-                        } else {
-                          validacionController.cargando = false;
-                          if (!context.mounted) return;
-                          ValidacionesDeAcceso.mostrarSnackBar(
-                            context,
-                            response,
-                            true,
-                            () {},
-                          );
-                        }
+                        if (!context.mounted) return;
+                        accionesInicioSesion(context, response);
                       },
                       child: Text('Iniciar Sesión'),
                     ),
                   ),
 
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
 
                   Row(
                     children: [
-                      Expanded(child: Divider(thickness: 2)),
+                      Expanded(
+                        child: Divider(
+                          thickness: 2,
+                          color: const Color.fromARGB(128, 0, 0, 0),
+                        ),
+                      ),
                       Text(
                         ' ó ',
                         style: TextStyle(fontWeight: FontWeight.w300),
                       ),
-                      Expanded(child: Divider(thickness: 2)),
+                      Expanded(
+                        child: Divider(
+                          thickness: 2,
+                          color: const Color.fromARGB(128, 0, 0, 0),
+                        ),
+                      ),
                     ],
                   ),
+                  SizedBox(height: 30),
+
+                  Center(
+                    child: SizedBox(
+                      width: 210,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white70,
+                          shadowColor: Colors.black45,
+                        ),
+                        onPressed: () async {
+                          //TODO: Loguearse con Google
+
+                          validacionController.cargando = true;
+
+                          String response = await _auth.iniciarSesionGoogle();
+
+                          if (!context.mounted) return;
+                          accionesInicioSesion(context, response);
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset('assets/iconos/googlex24.png'),
+                            SizedBox(width: 10),
+                            Text(
+                              'Continuar con Google',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -151,8 +179,20 @@ class Login extends StatelessWidget {
               );
             }),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  accionesInicioSesion(BuildContext context, String response) {
+    if (validacionController.error == false) {
+      if (!context.mounted) return;
+      GetStorage().write('sesionIniciada', true);
+      context.goNamed('inicio');
+    } else {
+      validacionController.cargando = false;
+      if (!context.mounted) return;
+      ValidacionesDeAcceso.mostrarSnackBar(context, response, true, () {});
+    }
   }
 }

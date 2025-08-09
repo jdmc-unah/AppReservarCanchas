@@ -1,6 +1,8 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
@@ -68,8 +70,36 @@ class AuthService {
     }
   }
 
+  Future<String> iniciarSesionGoogle() async {
+    try {
+      final usuarioGoogle = await GoogleSignIn().signIn();
+      final googleAuth = await usuarioGoogle?.authentication;
+      final cred = GoogleAuthProvider.credential(
+        idToken: googleAuth?.idToken,
+        accessToken: googleAuth?.accessToken,
+      );
+
+      final userCred = await _auth.signInWithCredential(cred);
+
+      if (userCred.user == null) return 'Ocurrio un error inesperado';
+
+      validacionController.error = false;
+      return userCred.user!.email.toString();
+    } on FirebaseAuthException catch (e) {
+      validacionController.error = true;
+      return manejaExepcionFireBase(e.code);
+    }
+  }
+
   Future<void> cerrarSesion() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+      await GoogleSignIn().signOut(); // Cierra sesión de Google
+      GetStorage().write('sesionIniciada', false);
+      validacionController.cargando = false;
+    } catch (e) {
+      print('ERROR AL SALIR DE LA APP');
+    }
   }
 
   static String manejaExepcionFireBase(String codigo) {

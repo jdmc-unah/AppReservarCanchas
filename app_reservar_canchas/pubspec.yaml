@@ -33,6 +33,8 @@ dependencies:
   firebase_auth: ^6.0.0
   firebase_core: ^4.0.0
 
+  google_sign_in: ^6.3.0
+
   get_storage: ^2.1.1
   get: ^4.7.2
 
@@ -70,6 +72,8 @@ flutter:
   assets:
     - assets/data/canchas_test.json
     - assets/imagenes/fondo_login3.jpg
+    - assets/iconos/google.png
+    - assets/iconos/googlex24.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
