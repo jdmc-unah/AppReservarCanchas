@@ -1,4 +1,6 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/modelos/usuario.dart';
+import 'package:app_reservar_canchas/servicios/servicio_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,6 +11,7 @@ class AuthService {
   final validacionController = Get.put<ValidacionesDeAcceso>(
     ValidacionesDeAcceso(),
   );
+
   Future<String> registroUsuario(
     String nombre,
     String correo,
@@ -16,8 +19,6 @@ class AuthService {
     String contra,
   ) async {
     try {
-      // print('${correo}, ${contra}');
-
       String? errorInterno = ValidacionesDeAcceso.validaRegistro(
         nombre,
         correo,
@@ -34,8 +35,16 @@ class AuthService {
         email: correo,
         password: contra,
       );
-      validacionController.error = false;
 
+      final usr = Usuario(
+        nombre: nombre,
+        correo: correo,
+        telefono: int.parse(telefono),
+      );
+      final responseFireStore = await FirestoreService().guardaPerfil(usr);
+      if (responseFireStore != null) return responseFireStore;
+
+      validacionController.error = false;
       return cred.user!.email.toString();
     } on FirebaseAuthException catch (e) {
       validacionController.error = true;
@@ -72,6 +81,7 @@ class AuthService {
 
   Future<String> iniciarSesionGoogle() async {
     try {
+      //Login por medio de google
       final usuarioGoogle = await GoogleSignIn().signIn();
       final googleAuth = await usuarioGoogle?.authentication;
       final cred = GoogleAuthProvider.credential(
@@ -79,9 +89,34 @@ class AuthService {
         accessToken: googleAuth?.accessToken,
       );
 
+      //Trae credenciales proveidas por google
       final userCred = await _auth.signInWithCredential(cred);
 
-      if (userCred.user == null) return 'Ocurrio un error inesperado';
+      //Guarda la data del usuario
+      final userData = userCred.user;
+      if (userData == null) return 'Ocurrio un error inesperado';
+
+      print(userData);
+
+      //Verifica si ya se tiene guardada la data del usuario en firestore
+      final usuarioExistente = await FirestoreService().traerPerfil(
+        userData.email,
+      );
+
+      if (usuarioExistente == null) {
+        final newUser = Usuario(
+          nombre: userData.displayName,
+          correo: userData.email,
+          telefono: int.parse(userCred.user!.phoneNumber ?? '0'),
+        );
+
+        print(newUser);
+
+        final responseFireStore = await FirestoreService().guardaPerfil(
+          newUser,
+        );
+        if (responseFireStore != null) return responseFireStore;
+      }
 
       validacionController.error = false;
       return userCred.user!.email.toString();
