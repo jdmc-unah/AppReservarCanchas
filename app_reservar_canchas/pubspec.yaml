@@ -47,6 +47,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_rating_bar: ^4.0.1
   intl: ^0.20.2
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,10 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/iconos/book&play_round.png"
+
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

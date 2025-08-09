@@ -80,6 +80,9 @@ class AuthService {
   }
 
   Future<String> iniciarSesionGoogle() async {
+    //TODO: Arreglar excepcion cuando no se elige ninguna cuenta de google
+    //TODO: El telefono lo trae nulo asi que habria que forzar al usuario a actualizar sus datos al iniciar sesion con google antes de hacer reservas
+
     try {
       //Login por medio de google
       final usuarioGoogle = await GoogleSignIn().signIn();
@@ -96,8 +99,6 @@ class AuthService {
       final userData = userCred.user;
       if (userData == null) return 'Ocurrio un error inesperado';
 
-      print(userData);
-
       //Verifica si ya se tiene guardada la data del usuario en firestore
       final usuarioExistente = await FirestoreService().traerPerfil(
         userData.email,
@@ -109,8 +110,6 @@ class AuthService {
           correo: userData.email,
           telefono: int.parse(userCred.user!.phoneNumber ?? '0'),
         );
-
-        print(newUser);
 
         final responseFireStore = await FirestoreService().guardaPerfil(
           newUser,

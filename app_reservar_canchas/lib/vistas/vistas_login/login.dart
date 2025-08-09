@@ -130,8 +130,6 @@ class Login extends StatelessWidget {
                           shadowColor: Colors.black45,
                         ),
                         onPressed: () async {
-                          //TODO: Loguearse con Google
-
                           validacionController.cargando = true;
 
                           String response = await _auth.iniciarSesionGoogle();
