@@ -79,17 +79,19 @@ class AuthService {
     }
   }
 
-  Future<String> iniciarSesionGoogle() async {
-    //TODO: Arreglar excepcion cuando no se elige ninguna cuenta de google
+  Future<String?> iniciarSesionGoogle() async {
     //TODO: El telefono lo trae nulo asi que habria que forzar al usuario a actualizar sus datos al iniciar sesion con google antes de hacer reservas
 
     try {
       //Login por medio de google
       final usuarioGoogle = await GoogleSignIn().signIn();
-      final googleAuth = await usuarioGoogle?.authentication;
+
+      if (usuarioGoogle == null) return null;
+
+      final googleAuth = await usuarioGoogle.authentication;
       final cred = GoogleAuthProvider.credential(
-        idToken: googleAuth?.idToken,
-        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
       );
 
       //Trae credenciales proveidas por google
@@ -97,7 +99,7 @@ class AuthService {
 
       //Guarda la data del usuario
       final userData = userCred.user;
-      if (userData == null) return 'Ocurrio un error inesperado';
+      if (userData == null) return null;
 
       //Verifica si ya se tiene guardada la data del usuario en firestore
       final usuarioExistente = await FirestoreService().traerPerfil(
@@ -108,7 +110,9 @@ class AuthService {
         final newUser = Usuario(
           nombre: userData.displayName,
           correo: userData.email,
-          telefono: int.parse(userCred.user!.phoneNumber ?? '0'),
+          telefono: userCred.user!.phoneNumber != null
+              ? int.parse(userCred.user!.phoneNumber!)
+              : null,
         );
 
         final responseFireStore = await FirestoreService().guardaPerfil(
@@ -122,6 +126,9 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       validacionController.error = true;
       return manejaExepcionFireBase(e.code);
+    } catch (e) {
+      validacionController.error = true;
+      return 'Ocurrio un error inesperado';
     }
   }
 

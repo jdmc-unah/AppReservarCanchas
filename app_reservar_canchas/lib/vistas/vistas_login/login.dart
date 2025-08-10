@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/imagenes/fondo_login3.jpg", //TODO: arreglar fondo
+              "assets/imagenes/fondo_login_oscuro.png", //TODO: arreglar fondo
               fit: BoxFit.cover,
             ),
           ),
@@ -132,7 +132,7 @@ class Login extends StatelessWidget {
                         onPressed: () async {
                           validacionController.cargando = true;
 
-                          String response = await _auth.iniciarSesionGoogle();
+                          String? response = await _auth.iniciarSesionGoogle();
 
                           if (!context.mounted) return;
                           accionesInicioSesion(context, response);
@@ -182,7 +182,7 @@ class Login extends StatelessWidget {
     );
   }
 
-  accionesInicioSesion(BuildContext context, String response) {
+  accionesInicioSesion(BuildContext context, String? response) {
     if (validacionController.error == false) {
       if (!context.mounted) return;
       GetStorage().write('sesionIniciada', true);
@@ -190,6 +190,9 @@ class Login extends StatelessWidget {
     } else {
       validacionController.cargando = false;
       if (!context.mounted) return;
+
+      if (response == null) return;
+
       ValidacionesDeAcceso.mostrarSnackBar(context, response, true, () {});
     }
   }

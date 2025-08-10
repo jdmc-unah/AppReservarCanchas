@@ -78,6 +78,7 @@ flutter:
   assets:
     - assets/data/canchas_test.json
     - assets/imagenes/fondo_login3.jpg
+    - assets/imagenes/fondo_login_oscuro.png
     - assets/iconos/googlex24.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
