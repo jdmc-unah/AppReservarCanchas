@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "assets/imagenes/fondo_login_oscuro.png", //TODO: arreglar fondo
+              "assets/imagenes/fondo_login_medio.png",
               fit: BoxFit.cover,
             ),
           ),
@@ -167,6 +167,8 @@ class Login extends StatelessWidget {
                         child: Text(
                           'Regístrate',
                           style: TextStyle(
+                            fontWeight: FontWeight.bold,
+
                             color: Color.fromARGB(255, 20, 122, 73),
                           ),
                         ),
