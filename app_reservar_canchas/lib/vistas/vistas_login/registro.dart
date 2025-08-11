@@ -115,6 +115,10 @@ class Registro extends StatelessWidget {
                           false,
                           () {
                             GetStorage().write('sesionIniciada', true);
+                            _auth.inicioSesionUsuario(
+                              _correo.text,
+                              _contra.text,
+                            );
                             context.goNamed('inicio');
                           },
                         );

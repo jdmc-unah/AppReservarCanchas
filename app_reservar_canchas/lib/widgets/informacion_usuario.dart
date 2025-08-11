@@ -1,7 +1,5 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
-import 'package:app_reservar_canchas/main.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
-import 'package:app_reservar_canchas/vistas/agregar_canchas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,11 +21,20 @@ class informacion_usuario extends StatelessWidget {
         child: PopupMenuButton(
           //Siguiente linea: Hace que la lista se desplace hacia abajo y no tapar el MenuBottonS
           position: PopupMenuPosition.under,
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.blue[50],
-            child: Text("Hola"),
-          ),
+          child: GetStorage().read('usuarioAvatar').toString().length == 1
+              ? CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.blue[50],
+                  child: Text(GetStorage().read('usuarioAvatar')),
+                )
+              : CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.blue[50],
+                  backgroundImage: NetworkImage(
+                    GetStorage().read('usuarioAvatar'),
+                  ),
+                ),
+
           itemBuilder: (context) => [
             PopupMenuItem(
               value: 0,

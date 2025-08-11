@@ -1,7 +1,6 @@
 import 'package:app_reservar_canchas/widgets/cancha_card.dart';
 import 'package:app_reservar_canchas/widgets/filtro_menu_lateral.dart';
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

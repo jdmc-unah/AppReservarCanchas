@@ -1,6 +1,5 @@
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 
 class FirestoreService {
   static FirebaseFirestore get _db => FirebaseFirestore.instance;
