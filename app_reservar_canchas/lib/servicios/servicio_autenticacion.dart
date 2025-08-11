@@ -44,6 +44,9 @@ class AuthService {
       final responseFireStore = await FirestoreService().guardaPerfil(usr);
       if (responseFireStore != null) return responseFireStore;
 
+      final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
+      if (docId != null) GetStorage().write('usuarioDocId', docId);
+
       validacionController.error = false;
       return cred.user!.email.toString();
     } on FirebaseAuthException catch (e) {
@@ -70,6 +73,9 @@ class AuthService {
         email: correo,
         password: contra,
       );
+
+      final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
+      if (docId != null) GetStorage().write('usuarioDocId', docId);
 
       validacionController.error = false;
       return cred.user!.email.toString();
@@ -121,6 +127,11 @@ class AuthService {
         if (responseFireStore != null) return responseFireStore;
       }
 
+      final docId = await FirestoreService().usuarioDocIdPorCorreo(
+        userData.email!,
+      );
+      if (docId != null) GetStorage().write('usuarioDocId', docId);
+
       validacionController.error = false;
       return userCred.user!.email.toString();
     } on FirebaseAuthException catch (e) {
@@ -136,6 +147,9 @@ class AuthService {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut(); // Cierra sesión de Google
+      //eliminar data
+      await GetStorage().remove('usuarioDocId');
+
       GetStorage().write('sesionIniciada', false);
       validacionController.cargando = false;
     } catch (e) {

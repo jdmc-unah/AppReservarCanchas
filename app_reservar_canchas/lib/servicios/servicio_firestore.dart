@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:app_reservar_canchas/modelos/usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,6 +18,16 @@ class FirestoreService {
     } catch (e) {
       return 'Error inesperado: $e';
     }
+  }
+
+  /// Buscar el ID del documento por correo
+  Future<String?> usuarioDocIdPorCorreo(String correo) async {
+    final doc = await _fire
+        .collection("usuarios")
+        .where('correo', isEqualTo: correo)
+        .limit(1)
+        .get();
+    return doc.docs.isNotEmpty ? doc.docs.first.id : null;
   }
 
   Future<Usuario?> traerPerfil(String? correo) async {

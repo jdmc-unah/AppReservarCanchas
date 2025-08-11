@@ -1,5 +1,7 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/main.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
+import 'package:app_reservar_canchas/vistas/agregar_canchas.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -7,6 +9,7 @@ import 'package:go_router/go_router.dart';
 
 class informacion_usuario extends StatelessWidget {
   informacion_usuario({super.key});
+  int index = 0;
 
   final validacionController = Get.put<ValidacionesDeAcceso>(
     ValidacionesDeAcceso(),
@@ -26,7 +29,11 @@ class informacion_usuario extends StatelessWidget {
             child: Text("Hola"),
           ),
           itemBuilder: (context) => [
-            PopupMenuItem(value: 0, child: Text("Informacion")),
+            PopupMenuItem(
+              value: 0,
+              child: Text("Informacion"),
+              onTap: () => context.goNamed('nueva'),
+            ),
             PopupMenuItem(
               value: 0,
               child: Text("Cerrar Sesión"),

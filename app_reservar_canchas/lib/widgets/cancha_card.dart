@@ -1,13 +1,15 @@
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:app_reservar_canchas/widgets/lista_horas.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class CanchaCard extends StatelessWidget {
   CanchaCard({super.key, required this.canchaId});
-  final int canchaId;
+  final String canchaId;
 
   //List<int> horasSeleccionadas = [];
 
@@ -21,7 +23,7 @@ class CanchaCard extends StatelessWidget {
       }
 
       final cancha = reservaControlador.canchas.firstWhere(
-        (element) => element.canchaId == canchaId,
+        (element) => element.id == canchaId,
       );
       return Card(
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -62,11 +64,11 @@ class CanchaCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              _botonVerReservados(
-                reservaControlador: reservaControlador,
-                canchaId: canchaId,
-                cancha: cancha,
-              ),
+              // _botonVerReservados(
+              //   reservaControlador: reservaControlador,
+              //   canchaId: canchaId,
+              //   cancha: cancha,
+              // ),
               SizedBox(height: 10),
 
               //Aca empieza
@@ -83,77 +85,77 @@ class CanchaCard extends StatelessWidget {
   }
 }
 
-class _botonVerReservados extends StatelessWidget {
-  const _botonVerReservados({
-    super.key,
-    required this.reservaControlador,
-    required this.canchaId,
-    required this.cancha,
-  });
+// class _botonVerReservados extends StatelessWidget {
+//   const _botonVerReservados({
+//     super.key,
+//     required this.reservaControlador,
+//     required this.canchaId,
+//     required this.cancha,
+//   });
 
-  final ReservasControlador reservaControlador;
-  final int canchaId;
-  final Cancha cancha;
+//   final ReservasControlador reservaControlador;
+//   final String canchaId;
+//   final Cancha cancha;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: MediaQuery.of(context).size.width * 0.59,
-        top: 8,
-      ),
-      child: Container(
-        height: 40,
-        width: 130,
-        child: ElevatedButton(
-          onPressed: () {
-            final fecha = reservaControlador.fechaActual(canchaId);
-            final horas = cancha.reservasPorFecha[fecha] ?? [];
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.only(
+//         left: MediaQuery.of(context).size.width * 0.59,
+//         top: 8,
+//       ),
+//       child: Container(
+//         height: 40,
+//         width: 130,
+//         child: ElevatedButton(
+//           onPressed: () {
+//             final fecha = reservaControlador.fechaActual(canchaId);
+//             final horas = cancha.reservasPorFecha[fecha] ?? [];
 
-            showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: Text('Horas reservadas - ${cancha.nombre}'),
-                content: Text(
-                  horas.isEmpty
-                      ? 'Ninguna hora reservada.'
-                      : horas.map((h) => "$h:00").join(', '),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Cerrar'),
-                  ),
-                ],
-              ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueGrey[300],
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.visibility, color: Colors.white, size: 18),
-              SizedBox(width: 4),
-              Text(
-                "Ver reservas",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//             showDialog(
+//               context: context,
+//               builder: (_) => AlertDialog(
+//                 title: Text('Horas reservadas - ${cancha.nombre}'),
+//                 content: Text(
+//                   horas.isEmpty
+//                       ? 'Ninguna hora reservada.'
+//                       : horas.map((h) => "$h:00").join(', '),
+//                 ),
+//                 actions: [
+//                   TextButton(
+//                     onPressed: () => Navigator.pop(context),
+//                     child: Text('Cerrar'),
+//                   ),
+//                 ],
+//               ),
+//             );
+//           },
+//           style: ElevatedButton.styleFrom(
+//             backgroundColor: Colors.blueGrey[300],
+//             shadowColor: Colors.transparent,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(10),
+//             ),
+//           ),
+//           child: Row(
+//             children: [
+//               Icon(Icons.visibility, color: Colors.white, size: 18),
+//               SizedBox(width: 4),
+//               Text(
+//                 "Ver reservas",
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontWeight: FontWeight.bold,
+//                   fontSize: 10,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _botonReserva extends StatelessWidget {
   const _botonReserva({
@@ -164,7 +166,7 @@ class _botonReserva extends StatelessWidget {
   });
 
   final ReservasControlador reservaControlador;
-  final int canchaId;
+  final String canchaId;
   final Cancha cancha;
 
   @override
@@ -177,40 +179,23 @@ class _botonReserva extends StatelessWidget {
         height: 40,
         width: 130,
         child: ElevatedButton(
-          onPressed: () {
-            final seleccionadas = reservaControlador.obtener(canchaId);
-            if (seleccionadas.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Debes seleccionar almenos una hora")),
-              );
-              return;
-            }
-            final fecha = reservaControlador.fechaActual(canchaId);
-            final reservadasActuales = cancha.reservasPorFecha[fecha] ?? [];
+          onPressed: () async {
+            final error = await reservaControlador.reservar(
+              userId: GetStorage().read('usuarioDocId'),
+              cancha: cancha,
+            );
 
-            final nuevas = seleccionadas
-                .where((hora) => !reservadasActuales.contains(hora))
-                .toList();
-
-            if (nuevas.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Todas las horas ya están reservadas")),
-              );
+            if (error != null) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(error)));
               return;
             }
 
-            //final fecha = reservaControlador.fechaActual(canchaId);
-            if (!cancha.reservasPorFecha.containsKey(fecha)) {
-              cancha.reservasPorFecha[fecha] = [];
-            }
-            cancha.reservasPorFecha[fecha]!.addAll(nuevas);
-
-            reservaControlador.limpiar(canchaId);
-            reservaControlador.canchas.refresh();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  "Reserva completada para cancha ${cancha.nombre}",
+                  'Reserva completada para cancha ${cancha.nombre}',
                 ),
               ),
             );
@@ -246,7 +231,7 @@ class _botonReserva extends StatelessWidget {
 class _botonCalendario extends StatelessWidget {
   const _botonCalendario({super.key, required this.canchaId});
 
-  final int canchaId;
+  final String canchaId;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +276,7 @@ class _fechaActualTxt extends StatelessWidget {
   });
 
   final ReservasControlador reservaControlador;
-  final int canchaId;
+  final String canchaId;
 
   @override
   Widget build(BuildContext context) {
@@ -317,9 +302,13 @@ class _ubicacionRating extends StatelessWidget {
         children: [
           Icon(Icons.location_on_outlined, size: 17),
           SizedBox(width: 4),
-          Text(
-            cancha.ubicacion,
-            style: TextStyle(fontSize: 17),
+          Expanded(
+            child: Text(
+              cancha.ubicacion,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
           ), //Variable ubicacion
           Spacer(),
           //SizedBox(width: 105),
@@ -369,15 +358,80 @@ class _ubicacionRating extends StatelessWidget {
 // }
 
 Stack stackImgNameFav(Cancha cancha) {
+  IconData iconoDeporte(String tipo) {
+    switch (tipo.toLowerCase()) {
+      case 'soccer':
+        return Icons.sports_soccer;
+      case 'basketball':
+        return Icons.sports_basketball;
+      case 'tenis':
+        return Icons.sports_tennis;
+      case 'padel':
+        return Icons.sports_cricket;
+      case 'volleybal':
+        return Icons.sports_volleyball;
+    }
+    return Icons.sports;
+  }
+
+  String textoTipo(String tipo) {
+    switch (tipo.toLowerCase()) {
+      case 'soccer':
+        return "Fútbol";
+      case 'basketball':
+        return 'Baloncesto';
+      case 'tenis':
+        return 'Tenis';
+      case 'padel':
+        return 'Padel';
+      case 'volleybal':
+        return 'Voleibol';
+    }
+    return tipo;
+  }
+
+  String imgUrl = cancha.url;
+  const kDefaultCanchaImg =
+      "https://media.istockphoto.com/id/1176735816/photo/blue-tennis-court-and-illuminated-indoor-arena-with-fans-upper-front-view.jpg?s=1024x1024&w=is&k=20&c=u4i72shR1eXzojkcsVRPf4HdqakcOg2Mo0ucuaFtvXo=";
+  if (imgUrl == "urlpaginaweb") {
+    imgUrl = kDefaultCanchaImg;
+  }
   //Widget stack permite poder sobreponer un widget sobre otro; como lo podemos suponer por su nombre.
   return Stack(
     alignment: Alignment.bottomLeft,
     children: [
       Image.network(
-        "https://media.istockphoto.com/id/1176735816/photo/blue-tennis-court-and-illuminated-indoor-arena-with-fans-upper-front-view.jpg?s=1024x1024&w=is&k=20&c=u4i72shR1eXzojkcsVRPf4HdqakcOg2Mo0ucuaFtvXo=",
+        imgUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: 160,
+      ),
+
+      Positioned(
+        top: 8,
+        left: 8,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.black54,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(iconoDeporte(cancha.tipo), size: 14, color: Colors.white),
+              SizedBox(width: 6),
+              Text(
+                textoTipo(cancha.tipo),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       Container(
         width: double.infinity,
@@ -396,16 +450,20 @@ Stack stackImgNameFav(Cancha cancha) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "${cancha.nombre}",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                "${cancha.nombre}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Text(
-              'LPS ${cancha.precio}',
+              'LPS ${cancha.precio.toPrecision(2)}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,

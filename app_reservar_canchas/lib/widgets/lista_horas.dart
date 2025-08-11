@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class ListaHoras extends StatelessWidget {
   //Variable que contiene las horas que han sido reservadas.
   // final List<int> horasReservadas;
-  final int canchaId;
+  final String canchaId;
 
   const ListaHoras({
     super.key,
@@ -26,55 +26,62 @@ class ListaHoras extends StatelessWidget {
 
     return Obx(() {
       final cancha = controller.canchas.firstWhere(
-        (element) => element.canchaId == canchaId,
+        (element) => element.id == canchaId,
       );
 
-      final fecha = controller.fechaActual(canchaId);
-      final horasReservadas = cancha.reservasPorFecha[fecha] ?? [];
+      //final fecha = controller.fechaActual(canchaId);
+      //final horasReservadas = cancha.reservasPorFecha[fecha] ?? [];
 
       final seleccionadas = controller.obtener(canchaId);
 
-      final horasDisponibles = List.generate(
-        cancha.horaFin - cancha.horaInicio + 1,
-        (i) => cancha.horaInicio + i,
-      ).where((h) => !horasReservadas.contains(h)).toList();
+      return StreamBuilder(
+        stream: controller.horasOcupadasStream(canchaId),
+        builder: (context, snapshot) {
+          final horasReservadas = snapshot.data ?? <int>{};
 
-      if (horasDisponibles.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Center(
-            child: Text(
-              'No hay horas disponibles :( \n Porque no mejor otro dia?',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        );
-      }
+          final horasDisponibles = List.generate(
+            cancha.horaFin - cancha.horaInicio + 1,
+            (i) => cancha.horaInicio + i,
+          ).where((h) => !horasReservadas.contains(h)).toList();
 
-      return SizedBox(
-        height: 50,
-        child: ListView.builder(
-          itemCount: horasDisponibles.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            final hora = horasDisponibles[index];
-            final isSelected = seleccionadas.contains(hora);
-
+          if (horasDisponibles.isEmpty) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ChoiceChip(
-                label: Text("${hora}:00"),
-                selected: isSelected,
-                onSelected: (_) => controller.accionHora(canchaId, hora),
-                selectedColor: Colors.green,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Center(
+                child: Text(
+                  'No hay horas disponibles :( \n Porque no mejor otro dia?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             );
-          },
-        ),
+          }
+
+          return SizedBox(
+            height: 50,
+            child: ListView.builder(
+              itemCount: horasDisponibles.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final hora = horasDisponibles[index];
+                final isSelected = seleccionadas.contains(hora);
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: ChoiceChip(
+                    label: Text("${hora}:00"),
+                    selected: isSelected,
+                    onSelected: (_) => controller.accionHora(canchaId, hora),
+                    selectedColor: Colors.green,
+                  ),
+                );
+              },
+            ),
+          );
+        },
       );
     });
   }

@@ -1,3 +1,5 @@
+import 'package:app_reservar_canchas/utilities/agregar_canchas.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
@@ -14,10 +16,9 @@ import 'package:app_reservar_canchas/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Get.put(ReservasControlador());
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(ReservasControlador());
 
   runApp(MyApp());
 }
@@ -39,6 +40,11 @@ class MyApp extends StatelessWidget {
         },
         initialLocation: '/inicio',
         routes: [
+          // GoRoute(
+          //   name: 'nueva',
+          //   path: '/nueva',
+          //   builder: (context, state) => AgregarCanchaPage(),
+          // ),
           GoRoute(
             name: 'login',
             path: '/login',

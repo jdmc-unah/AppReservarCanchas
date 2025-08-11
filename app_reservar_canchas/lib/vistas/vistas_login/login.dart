@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/main.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +163,7 @@ class Login extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
+                          //seedCanchasDesdeApp();
                           context.goNamed('registro');
                         },
                         child: Text(
