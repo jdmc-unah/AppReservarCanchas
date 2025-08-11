@@ -1,16 +1,30 @@
+import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
+import 'package:app_reservar_canchas/servicios/servicio_firestore.dart';
 import 'package:app_reservar_canchas/widgets/cancha_card.dart';
 import 'package:app_reservar_canchas/widgets/filtro_menu_lateral.dart';
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/informacion_usuario.dart';
 
 class PaginaInicio extends StatelessWidget {
-  const PaginaInicio({super.key});
+  PaginaInicio({super.key});
+
+  //Ingresar telefono si se registra con google
+  final _auth = AuthService();
+  final _fire = FirestoreService();
+  final _telefono = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (GetStorage().read('usuarioTelefono') == null) {
+      _actualizarTelefono(context);
+    }
+
     final reservaControlador = Get.find<ReservasControlador>();
 
     return Scaffold(
@@ -42,5 +56,87 @@ class PaginaInicio extends StatelessWidget {
         );
       }),
     );
+  }
+
+  void _actualizarTelefono(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return PopScope(
+            canPop: false,
+            child: AlertDialog(
+              title: Text('¡Bienvenido!'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LoginTextField(
+                    topText: 'Ingresa tu telefono para continuar',
+                    hintText: '99999999',
+                    prefixIcon: Icons.phone,
+                    controller: _telefono,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    _auth.cerrarSesion();
+                    context.goNamed('login');
+                  },
+                  child: Text('Salir'),
+                ),
+                TextButton(
+                  child: Text('Aceptar'),
+                  onPressed: () async {
+                    //Valida telefono
+                    int tel;
+                    try {
+                      tel = int.parse(_telefono.text);
+                    } catch (e) {
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        'El telefono debe ser solo numeros ',
+                        true,
+                        () {},
+                      );
+                      return;
+                    }
+
+                    if (_telefono.text.length != 8) {
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        'El telefono debe ser de 8 digitos ',
+                        true,
+                        () {},
+                      );
+                      return;
+                    }
+
+                    //Actualiza firestore y variable local
+                    await _fire.actualizarTelefono(tel);
+                    GetStorage().write('usuarioTelefono', tel);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Color.fromARGB(255, 20, 122, 73),
+                        action: null,
+                        content: Text(
+                          'Los datos han sido actualizados',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
   }
 }

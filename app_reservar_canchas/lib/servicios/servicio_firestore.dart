@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app_reservar_canchas/modelos/usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_storage/get_storage.dart';
 
 class FirestoreService {
   final _fire = FirebaseFirestore.instance;
@@ -8,6 +9,25 @@ class FirestoreService {
   Future<String?> guardaPerfil(Usuario usr) async {
     try {
       await _fire.collection("usuarios").add(usr.toJson());
+
+      // nuevoUsuario.id; //para ver el id del nuevo usuario creado
+      return null;
+    } on FirebaseException catch (e) {
+      return 'Error de Firebase: ${e.message}';
+    } on SocketException {
+      return 'Sin conexión a internet';
+    } catch (e) {
+      return 'Error inesperado: $e';
+    }
+  }
+
+  Future<String?> actualizarTelefono(int tel) async {
+    try {
+      final Map<String, dynamic> nuevosDatos = {'telefono': tel};
+      await _fire
+          .collection("usuarios")
+          .doc(GetStorage().read('usuarioDocId'))
+          .update(nuevosDatos);
 
       // nuevoUsuario.id; //para ver el id del nuevo usuario creado
       return null;

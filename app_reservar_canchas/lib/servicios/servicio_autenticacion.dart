@@ -74,12 +74,14 @@ class AuthService {
         password: contra,
       );
 
+      //Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
       if (docId != null) GetStorage().write('usuarioDocId', docId);
 
       final perfil = await FirestoreService().traerPerfil(correo);
       if (perfil != null) {
         GetStorage().write('usuarioAvatar', perfil.nombre![0].toUpperCase());
+        GetStorage().write('usuarioTelefono', perfil.telefono);
       }
 
       validacionController.error = false;
@@ -113,7 +115,7 @@ class AuthService {
       if (userData == null) return null;
 
       //Verifica si ya se tiene guardada la data del usuario en firestore
-      final usuarioExistente = await FirestoreService().traerPerfil(
+      Usuario? usuarioExistente = await FirestoreService().traerPerfil(
         userData.email,
       );
       final Usuario newUser;
@@ -130,14 +132,17 @@ class AuthService {
           newUser,
         );
         if (responseFireStore != null) return responseFireStore;
+        usuarioExistente = newUser;
       }
 
+      //Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(
         userData.email!,
       );
       if (docId != null) GetStorage().write('usuarioDocId', docId);
 
       GetStorage().write('usuarioAvatar', userData.photoURL);
+      GetStorage().write('usuarioTelefono', usuarioExistente.telefono);
 
       validacionController.error = false;
       return userCred.user!.email.toString();
@@ -154,11 +159,12 @@ class AuthService {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut(); // Cierra sesión de Google
-      //eliminar data
-      await GetStorage().remove('usuarioDocId');
-      await GetStorage().remove('usuarioAvatar');
+      // //eliminar data
+      // await GetStorage().remove('usuarioDocId');
+      // await GetStorage().remove('usuarioAvatar');
+      // GetStorage().write('sesionIniciada', false);
+      GetStorage().erase;
 
-      GetStorage().write('sesionIniciada', false);
       validacionController.cargando = false;
     } catch (e) {
       print('ERROR AL SALIR DE LA APP');
