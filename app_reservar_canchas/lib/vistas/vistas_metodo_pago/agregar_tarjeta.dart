@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_reservar_canchas/widgets/widgets_metodo_pago/vista_tarjeta.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AddCardPage extends StatefulWidget {
   AddCardPage({Key? key}) : super(key: key);
@@ -56,12 +57,19 @@ class _AddCardPageState extends State<AddCardPage> {
             ),
             SizedBox(height: 20),
             CardPreviewWidget(
-              cardNumber: _cardNumberController.text.padRight(16, '*').replaceAllMapped(
-                  RegExp(r'.{4}'), (match) => '${match.group(0)} ').trim(),
+              cardNumber: _cardNumberController.text
+                  .padRight(16, '*')
+                  .replaceAllMapped(
+                    RegExp(r'.{4}'),
+                    (match) => '${match.group(0)} ',
+                  )
+                  .trim(),
               cardHolderName: _cardHolderController.text.isEmpty
                   ? 'NOMBRE COMPLETO'
                   : _cardHolderController.text.toUpperCase(),
-              expiryDate: _expiryDateController.text.isEmpty ? 'MM/AA' : _expiryDateController.text,
+              expiryDate: _expiryDateController.text.isEmpty
+                  ? 'MM/AA'
+                  : _expiryDateController.text,
               cardColor: _selectedColor,
             ),
             SizedBox(height: 20),
@@ -70,9 +78,7 @@ class _AddCardPageState extends State<AddCardPage> {
               label: 'Número de la tarjeta',
               keyboardType: TextInputType.number,
               maxLength: 16,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
             SizedBox(height: 15),
             _buildTextField(
@@ -91,9 +97,7 @@ class _AddCardPageState extends State<AddCardPage> {
                     label: 'Fecha de expiración',
                     keyboardType: TextInputType.datetime,
                     maxLength: 5,
-                    inputFormatters: [
-                      _DateFormatter(),
-                    ],
+                    inputFormatters: [_DateFormatter()],
                   ),
                 ),
                 SizedBox(width: 15),
@@ -103,9 +107,7 @@ class _AddCardPageState extends State<AddCardPage> {
                     label: 'Código',
                     keyboardType: TextInputType.number,
                     maxLength: 3,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
               ],
@@ -172,9 +174,7 @@ class _AddCardPageState extends State<AddCardPage> {
         ),
         SizedBox(width: 15),
         GestureDetector(
-          onTap: () {
-            
-          },
+          onTap: () {},
           child: Container(
             width: 40,
             height: 40,
@@ -204,13 +204,14 @@ class _AddCardPageState extends State<AddCardPage> {
         onPressed: () async {
           try {
             await FirebaseFirestore.instance.collection('tarjetas').add({
+              'idUser': GetStorage().read('usuarioDocId'),
               'numero_tarjeta': _cardNumberController.text,
               'nombre_titular': _cardHolderController.text,
               'fecha_expiracion': _expiryDateController.text,
               'color': _selectedColor.value,
               'timestamp': FieldValue.serverTimestamp(),
             });
-            
+
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Tarjeta agregada con éxito!')),
             );
@@ -232,7 +233,10 @@ class _AddCardPageState extends State<AddCardPage> {
 
 class _DateFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String text = newValue.text;
     String newText = '';
 
@@ -243,14 +247,14 @@ class _DateFormatter extends TextInputFormatter {
       // Limita la longitud a 4 dígitos
       text = text.substring(0, 4);
     }
-    
+
     if (text.length >= 2) {
       // Agrega la barra después de los primeros dos dígitos
       newText = text.substring(0, 2) + '/' + text.substring(2);
     } else {
       newText = text;
     }
-    
+
     return newValue.copyWith(
       text: newText,
       selection: TextSelection.collapsed(offset: newText.length),

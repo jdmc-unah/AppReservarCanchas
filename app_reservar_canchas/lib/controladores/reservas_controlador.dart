@@ -85,6 +85,7 @@ class ReservasControlador extends GetxController {
       fecha: fecha,
       horas: horas,
       total: total,
+      tipo: cancha.tipo,
     );
 
     limpiar(cancha.id);

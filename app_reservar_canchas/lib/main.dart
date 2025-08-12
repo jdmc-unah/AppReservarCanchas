@@ -1,3 +1,7 @@
+import 'package:app_reservar_canchas/modelos/cancha.dart';
+import 'package:app_reservar_canchas/vistas/informacion.dart';
+import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
+import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/pagina_pago.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
@@ -29,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: GoRouter(
+        navigatorKey: Get.key,
         redirect: (context, state) {
           final sesionIniciada = GetStorage().read('sesionIniciada') ?? false;
           final rutaActual = state.fullPath;
@@ -63,6 +68,37 @@ class MyApp extends StatelessWidget {
             builder: (context, state) {
               return PaginaInicio();
             },
+          ),
+          GoRoute(
+            name: 'pago',
+            path: '/pago',
+            builder: (context, state) {
+              final extra = state.extra;
+              final reservasControlador = Get.find<ReservasControlador>();
+              Cancha? cancha;
+
+              if (extra is Cancha) {
+                cancha = extra;
+              } else if (extra is Map<String, dynamic>) {
+                cancha = extra['cancha'] as Cancha?;
+              }
+
+              return PaymentMethodsPage(cancha: cancha);
+            },
+
+            routes: [
+              GoRoute(
+                name: 'agregarTarjeta',
+                path: '/agregarTarjeta',
+                builder: (context, state) => AddCardPage(),
+              ),
+            ],
+          ),
+
+          GoRoute(
+            name: 'informacion',
+            path: '/informacion',
+            builder: (context, state) => PaginaResumenUsuario(),
           ),
         ],
       ),

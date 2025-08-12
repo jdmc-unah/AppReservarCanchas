@@ -39,7 +39,7 @@ class informacion_usuario extends StatelessWidget {
             PopupMenuItem(
               value: 0,
               child: Text("Informacion"),
-              onTap: () => context.goNamed('nueva'),
+              onTap: () => context.pushNamed('informacion'),
             ),
             PopupMenuItem(
               value: 0,

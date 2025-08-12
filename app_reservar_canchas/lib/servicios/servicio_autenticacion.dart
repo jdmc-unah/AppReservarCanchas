@@ -140,7 +140,6 @@ class AuthService {
         userData.email!,
       );
       if (docId != null) GetStorage().write('usuarioDocId', docId);
-
       GetStorage().write('usuarioAvatar', userData.photoURL);
       GetStorage().write('usuarioTelefono', usuarioExistente.telefono);
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class CanchaCard extends StatelessWidget {
   CanchaCard({super.key, required this.canchaId});
@@ -179,25 +180,32 @@ class _botonReserva extends StatelessWidget {
         width: 130,
         child: ElevatedButton(
           onPressed: () async {
-            final error = await reservaControlador.reservar(
-              userId: GetStorage().read('usuarioDocId'),
-              cancha: cancha,
+            context.goNamed(
+              'pago',
+              extra: {
+                "cancha": cancha,
+                "reservasControlador": reservaControlador,
+              },
             );
+            // final error = await reservaControlador.reservar(
+            //   userId: GetStorage().read('usuarioDocId'),
+            //   cancha: cancha,
+            // );
 
-            if (error != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(error)));
-              return;
-            }
+            // if (error != null) {
+            //   ScaffoldMessenger.of(
+            //     context,
+            //   ).showSnackBar(SnackBar(content: Text(error)));
+            //   return;
+            // }
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Reserva completada para cancha ${cancha.nombre}',
-                ),
-              ),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(
+            //       'Reserva completada para cancha ${cancha.nombre}',
+            //     ),
+            //   ),
+            // );
           },
 
           style: ElevatedButton.styleFrom(

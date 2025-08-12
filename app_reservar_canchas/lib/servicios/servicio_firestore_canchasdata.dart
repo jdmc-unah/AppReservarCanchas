@@ -30,6 +30,7 @@ class FirestoreService {
   }
 
   static Future<void> crearReserva({
+    required String tipo,
     required String userId,
     //required String usuarioDocId,
     required String canchaId,
@@ -38,22 +39,25 @@ class FirestoreService {
     required List<int> horas, // ej: [10,11,12]
     required double total,
   }) async {
+    //Input directo a reservas
     horas.sort();
     final reservaRef = _db.collection('reservas').doc();
     await reservaRef.set({
       'userId': userId,
       //'usuarioDocId': usuarioDocId,
       'canchaId': canchaId,
+      'tipo': tipo,
       'fecha': fecha,
       'horasReservadas': horas,
       'total': total,
       'estado': 'confirmada',
       'createdAt': FieldValue.serverTimestamp(),
     });
-
+    //Input al usuario
     await _db.doc('usuarios/$userId/reservas/${reservaRef.id}').set({
       'reservaId': reservaRef.id,
       'canchaId': canchaId,
+      'tipo': tipo,
       'canchaNombre': canchaNombre,
       'fecha': fecha,
       'horasReservadas': horas,

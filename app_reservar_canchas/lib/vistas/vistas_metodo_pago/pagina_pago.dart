@@ -1,38 +1,26 @@
+import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
 import 'package:app_reservar_canchas/widgets/widgets_metodo_pago/widget_tarjeta.dart';
 import 'package:app_reservar_canchas/controladores/metodo_pago/controlador_tarjeta.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class PaymentMethodsPage extends StatelessWidget {
-  PaymentMethodsPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Métodos de Pago',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-        ),
-      ),
-      home: _PaymentMethodsPageContent(),
-    );
-  }
-}
-
-class _PaymentMethodsPageContent extends StatelessWidget {
+  final Cancha? cancha;
+  final ReservasControlador? reservasControlador;
+  PaymentMethodsPage({this.cancha, this.reservasControlador, Key? key})
+    : super(key: key);
   final PaymentController controller = Get.put(PaymentController());
 
-  _PaymentMethodsPageContent({Key? key}) : super(key: key);
-
-  void _showSnackBar(BuildContext context, String message, {Color color = Colors.black}) {
+  void _showSnackBar(
+    BuildContext context,
+    String message, {
+    Color color = Colors.black,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -42,16 +30,46 @@ class _PaymentMethodsPageContent extends StatelessWidget {
     );
   }
 
-  void _handlePayment(BuildContext context) {
+  void _handlePayment(BuildContext context) async {
     if (controller.selectedCardId == null) {
-      _showSnackBar(context, 'Debe seleccionar una tarjeta.', color: Colors.red);
+      _showSnackBar(
+        context,
+        'Debe seleccionar una tarjeta.',
+        color: Colors.red,
+      );
     } else {
-      _showSnackBar(context, 'El pago a sido realizado con exito.', color: Colors.green);
+      _showSnackBar(
+        context,
+        'El pago a sido realizado con exito.',
+        color: Colors.green,
+      );
+
+      final ReservasControlador reservasControlador =
+          Get.find<ReservasControlador>();
+      final error = await reservasControlador.reservar(
+        userId: GetStorage().read('usuarioDocId'),
+        cancha: cancha!,
+      );
+
+      if (error != null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error)));
+        return;
+      }
+      context.goNamed("inicio");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Reserva completada para cancha ${cancha!.nombre}'),
+        ),
+      );
     }
+    //Logica de la reserva luego del pago:
   }
 
   Future<void> _deleteCard(BuildContext context, String docId) async {
-    bool confirm = await Get.dialog<bool>(
+    bool confirm =
+        await Get.dialog<bool>(
           AlertDialog(
             title: Text('Confirmar eliminación'),
             content: Text('¿Estás seguro de que deseas eliminar esta tarjeta?'),
@@ -66,18 +84,30 @@ class _PaymentMethodsPageContent extends StatelessWidget {
               ),
             ],
           ),
+          barrierDismissible: false,
         ) ??
         false;
 
     if (confirm) {
       try {
-        await FirebaseFirestore.instance.collection('tarjetas').doc(docId).delete();
+        await FirebaseFirestore.instance
+            .collection('tarjetas')
+            .doc(docId)
+            .delete();
         if (controller.selectedCardId == docId) {
           controller.setSelectedCard(null);
         }
-        _showSnackBar(context, 'Tarjeta eliminada con éxito!', color: Colors.green);
+        _showSnackBar(
+          context,
+          'Tarjeta eliminada con éxito!',
+          color: Colors.green,
+        );
       } catch (e) {
-        _showSnackBar(context, 'Error al eliminar la tarjeta: $e', color: Colors.red);
+        _showSnackBar(
+          context,
+          'Error al eliminar la tarjeta: $e',
+          color: Colors.red,
+        );
       }
     }
   }
@@ -88,7 +118,13 @@ class _PaymentMethodsPageContent extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.goNamed('inicio'); // o context.go('/inicio')
+            }
+          },
         ),
         title: Text('Volver'),
       ),
@@ -108,7 +144,10 @@ class _PaymentMethodsPageContent extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('tarjetas').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('tarjetas')
+                  .where('idUser', isEqualTo: GetStorage().read("usuarioDocId"))
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Algo salió mal');
@@ -125,12 +164,15 @@ class _PaymentMethodsPageContent extends StatelessWidget {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                    Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+                    Map<String, dynamic> data =
+                        doc.data()! as Map<String, dynamic>;
                     String docId = doc.id;
 
                     return GestureDetector(
                       onTap: () {
-                        controller.setSelectedCard(controller.selectedCardId == docId ? null : docId);
+                        controller.setSelectedCard(
+                          controller.selectedCardId == docId ? null : docId,
+                        );
                       },
                       child: Obx(() {
                         bool isSelected = controller.selectedCardId == docId;
@@ -138,7 +180,9 @@ class _PaymentMethodsPageContent extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 10.0),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isSelected ? Colors.orange : Colors.transparent,
+                              color: isSelected
+                                  ? Colors.orange
+                                  : Colors.transparent,
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(15.0),
@@ -146,7 +190,11 @@ class _PaymentMethodsPageContent extends StatelessWidget {
                           child: Stack(
                             children: [
                               CardWidget(
-                                cardNumber: data['numero_tarjeta'],
+                                cardNumber: enmascararNumeroTarjeta(
+                                  formatearNumeroTarjeta(
+                                    data["numero_tarjeta"],
+                                  ),
+                                ),
                                 cardHolderName: data['nombre_titular'],
                                 expiryDate: data['fecha_expiracion'],
                                 cardColor: Color(data['color']),
@@ -165,7 +213,10 @@ class _PaymentMethodsPageContent extends StatelessWidget {
                                 top: 10,
                                 left: 10,
                                 child: IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.white),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
                                   onPressed: () => _deleteCard(context, docId),
                                 ),
                               ),
@@ -232,4 +283,26 @@ class _PaymentMethodsPageContent extends StatelessWidget {
       ),
     );
   }
+}
+
+// Formatea el número de tarjeta separando cada 4 dígitos
+String formatearNumeroTarjeta(String numero) {
+  // Elimina cualquier espacio previo
+  final limpio = numero.replaceAll(RegExp(r'\s+'), '');
+  final buffer = StringBuffer();
+  for (var i = 0; i < limpio.length; i++) {
+    buffer.write(limpio[i]);
+    if ((i + 1) % 4 == 0 && i + 1 != limpio.length) {
+      buffer.write(' ');
+    }
+  }
+  return buffer.toString();
+}
+
+// Enmascara el número de tarjeta dejando visibles solo los últimos 4 dígitos
+String enmascararNumeroTarjeta(String numero) {
+  final limpio = numero.replaceAll(RegExp(r'\s+'), '');
+  if (limpio.length < 4) return numero;
+  final ultimos4 = limpio.substring(limpio.length - 4);
+  return '**** **** **** $ultimos4';
 }

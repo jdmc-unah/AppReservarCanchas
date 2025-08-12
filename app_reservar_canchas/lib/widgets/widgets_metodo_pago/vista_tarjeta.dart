@@ -13,16 +13,16 @@ class CardPreviewWidget extends StatelessWidget {
     required this.expiryDate,
     required this.cardColor,
   }) : super(key: key);
-  
+
   String _getCardLogo(String cardNumber) {
     if (cardNumber.startsWith('4')) {
-      return 'assets/logo_visa.png';
+      return 'assets/imagenes/metodo_pago/logo_visa.png';
     } else if (cardNumber.startsWith('5')) {
-      return 'assets/logo_mastercard.png';
+      return 'assets/imagenes/metodo_pago/logo_mastercard.png';
     } else if (cardNumber.startsWith('3')) {
-      return 'assets/logo_american.png';
+      return 'assets/imagenes/metodo_pago/logo_american.png';
     }
-    return 'assets/logo_mastercard.png'; // Un logo por defecto si no coincide
+    return 'assets/imagenes/metodo_pago/logo_mastercard.png'; // Un logo por defecto si no coincide
   }
 
   @override

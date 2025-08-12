@@ -17,20 +17,19 @@ class CardWidget extends StatelessWidget {
   // Método para obtener la ruta del logo según el primer dígito del número
   String _getCardLogo(String cardNumber) {
     if (cardNumber.startsWith('4')) {
-      return 'assets/logo_visa.png';
+      return 'assets/imagenes/metodo_pago/logo_visa.png';
     } else if (cardNumber.startsWith('5')) {
-      return 'assets/logo_mastercard.png';
+      return 'assets/imagenes/metodo_pago/logo_mastercard.png';
     } else if (cardNumber.startsWith('3')) {
-      return 'assets/logo_american.png';
+      return 'assets/imagenes/metodo_pago/logo_american.png';
     }
-    return 'assets/logo_mastercard.png'; // Un logo por defecto si no coincide
+    return 'assets/imagenes/metodo_pago/logo_mastercard.png'; // Un logo por defecto si no coincide
   }
 
   @override
   Widget build(BuildContext context) {
-
     final String cardLogoPath = _getCardLogo(cardNumber.replaceAll(' ', ''));
-    
+
     return Container(
       padding: EdgeInsets.all(20.0),
       decoration: BoxDecoration(
