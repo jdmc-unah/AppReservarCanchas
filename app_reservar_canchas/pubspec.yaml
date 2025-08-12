@@ -79,6 +79,9 @@ flutter:
     - assets/data/canchas_test.json
     - assets/imagenes/fondo_login_medio.png
     - assets/iconos/googlex24.png
+    - assets/imagenes/metodo_pago/logo_mastercard.png
+    - assets/imagenes/metodo_pago/logo_visa.png
+    - assets/imagenes/metodo_pago/logo_american.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
