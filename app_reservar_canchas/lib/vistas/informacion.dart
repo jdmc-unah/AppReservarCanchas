@@ -1,8 +1,8 @@
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/widgets/widgets_metodo_pago/vista_tarjeta.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,6 +18,10 @@ class PaginaResumenUsuario extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Mi cuenta'),
           bottom: const TabBar(
+            labelColor: Colores.textoPrimario,
+            dividerColor: Colores.fondoPrimario,
+            indicatorColor: Colores.fondoPrimario,
+            unselectedLabelColor: Colores.fondoComplementoN,
             tabs: [
               Tab(icon: Icon(Icons.history), text: 'Historial de reservas'),
               Tab(icon: Icon(Icons.credit_card), text: 'Métodos de pago'),
@@ -151,10 +155,11 @@ class _HistorialReservas extends StatelessWidget {
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor:
+                            Colores.fondoPrimario, //Theme.of(context),
                         child: Icon(
                           iconoDeporte(datos['tipo'] ?? ''),
-                          color: Colors.white,
+                          color: Colores.textoSecundario,
                         ),
                       ),
                       title: Text(
@@ -186,7 +191,9 @@ class _HistorialReservas extends StatelessWidget {
                           (estado ?? 'confirmada') == 'confirmada'
                               ? "Pago confirmado"
                               : "Pago pendiente",
-                          style: const TextStyle(color: Colors.black45),
+                          style: const TextStyle(
+                            color: Colores.fondoComplementoN,
+                          ),
                         ),
                       ],
                     ),
@@ -232,9 +239,17 @@ class _MetodosPago extends StatelessWidget {
         if (documentos.isEmpty) {
           return Center(
             child: ElevatedButton.icon(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  Colores.textoSecundario,
+                ),
+              ),
               onPressed: () => context.pushNamed('agregarTarjeta'),
-              icon: const Icon(Icons.add),
-              label: const Text('¿Quieres agregar una tarjeta?'),
+              icon: const Icon(Icons.add, color: Colores.fondoPrimario),
+              label: const Text(
+                '¿Quieres agregar una tarjeta?',
+                style: TextStyle(color: Colores.fondoPrimario),
+              ),
             ),
           );
         }
@@ -249,8 +264,11 @@ class _MetodosPago extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () => context.pushNamed('agregarTarjeta'),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Agregar otra tarjeta'),
+                    icon: const Icon(Icons.add, color: Colores.fondoPrimario),
+                    label: const Text(
+                      'Agregar otra tarjeta',
+                      style: TextStyle(color: Colores.textoPrimario),
+                    ),
                   ),
                 ),
               );
@@ -294,7 +312,10 @@ class _MetodosPago extends StatelessWidget {
                     left: 6,
                     child: IconButton(
                       tooltip: 'Eliminar tarjeta',
-                      icon: const Icon(Icons.delete, color: Colors.white),
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colores.textoSecundario,
+                      ),
                       onPressed: () => _eliminarTarjeta(context, idDocumento),
                     ),
                   ),
@@ -321,9 +342,17 @@ class _MetodosPago extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancelar'),
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colores.textoPrimario),
+                ),
               ),
               FilledButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    Colores.fondoPrimario,
+                  ),
+                ),
                 onPressed: () => Navigator.pop(context, true),
                 child: const Text('Eliminar'),
               ),
@@ -340,7 +369,13 @@ class _MetodosPago extends StatelessWidget {
           .doc(idDocumento)
           .delete();
       messenger.showSnackBar(
-        const SnackBar(content: Text('Tarjeta eliminada')),
+        const SnackBar(
+          content: Text(
+            'Tarjeta eliminada',
+            style: TextStyle(color: Colores.textoSecundario),
+          ),
+          backgroundColor: Colores.fondoPrimario,
+        ),
       );
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text('Error al eliminar: $e')));

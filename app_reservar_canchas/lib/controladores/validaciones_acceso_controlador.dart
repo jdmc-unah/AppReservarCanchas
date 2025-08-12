@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -90,15 +91,16 @@ class ValidacionesDeAcceso extends GetxController {
   ) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: esError
-            ? Colors.red
-            : Color.fromARGB(255, 20, 122, 73),
+        backgroundColor: esError ? Colores.error : Colores.fondoPrimario,
         action: SnackBarAction(
           label: esError ? 'Cerrar' : 'Entrar a la aplicación',
-          textColor: Colors.white,
+          textColor: Colores.textoSecundario,
           onPressed: accion,
         ),
-        content: Text(mensaje, style: TextStyle(color: Colors.white)),
+        content: Text(
+          mensaje,
+          style: TextStyle(color: Colores.textoSecundario),
+        ),
       ),
     );
   }

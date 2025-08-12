@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 
 class LoginTextField extends StatefulWidget {
@@ -46,7 +47,6 @@ class _LoginTextFieldState extends State<LoginTextField> {
         ),
 
         TextField(
-          cursorColor: Color.fromARGB(255, 20, 122, 73),
           controller: widget.controller,
           obscureText: widget.activarSuffix == true
               ? mostrarContra
@@ -58,7 +58,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color.fromARGB(255, 20, 122, 73)),
+              borderSide: BorderSide(color: Colores.fondoPrimario),
             ),
             hintText: widget.hintText,
             prefixIcon: Icon(widget.prefixIcon),

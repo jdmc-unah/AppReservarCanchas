@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 
 class CardWidget extends StatelessWidget {
@@ -55,7 +56,7 @@ class CardWidget extends StatelessWidget {
           Text(
             cardNumber,
             style: TextStyle(
-              color: Colors.white,
+              color: Colores.textoSecundario,
               fontSize: 20,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
@@ -68,7 +69,7 @@ class CardWidget extends StatelessWidget {
               Text(
                 cardHolderName,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colores.textoSecundario,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -76,7 +77,7 @@ class CardWidget extends StatelessWidget {
               Text(
                 expiryDate,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colores.textoSecundario,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

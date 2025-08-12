@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,11 @@ class Login extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Obx(() {
               if (validacionController.cargando) {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colores.fondoPrimario,
+                  ),
+                );
               }
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +46,7 @@ class Login extends StatelessWidget {
                 children: [
                   SizedBox(height: 40),
                   Text(
-                    'Bienvenido !',
+                    '¡Bienvenido!',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
 
@@ -76,8 +81,8 @@ class Login extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 20, 122, 73),
-                        foregroundColor: Colors.white,
+                        backgroundColor: Colores.fondoPrimario,
+                        foregroundColor: Colores.textoSecundario,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -104,7 +109,7 @@ class Login extends StatelessWidget {
                       Expanded(
                         child: Divider(
                           thickness: 2,
-                          color: const Color.fromARGB(128, 0, 0, 0),
+                          color: Colores.fondoComplementoN,
                         ),
                       ),
                       Text(
@@ -114,7 +119,7 @@ class Login extends StatelessWidget {
                       Expanded(
                         child: Divider(
                           thickness: 2,
-                          color: const Color.fromARGB(128, 0, 0, 0),
+                          color: Colores.fondoComplementoN,
                         ),
                       ),
                     ],
@@ -123,11 +128,11 @@ class Login extends StatelessWidget {
 
                   Center(
                     child: SizedBox(
-                      width: 210,
+                      width: 230,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white70,
-                          shadowColor: Colors.black45,
+                          backgroundColor: Colores.fondoComplementoB,
+                          shadowColor: Colores.fondoComplementoN,
                         ),
                         onPressed: () async {
                           validacionController.cargando = true;
@@ -140,10 +145,10 @@ class Login extends StatelessWidget {
                         child: Row(
                           children: [
                             Image.asset('assets/iconos/googlex24.png'),
-                            SizedBox(width: 10),
+                            SizedBox(width: 20),
                             Text(
                               'Continuar con Google',
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colores.textoPrimario),
                             ),
                           ],
                         ),
@@ -157,10 +162,15 @@ class Login extends StatelessWidget {
 
                     children: [
                       Text(
-                        'No tienes una cuenta?  ',
+                        '¿No tienes una cuenta?  ',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       TextButton(
+                        style: ButtonStyle(
+                          overlayColor: WidgetStateProperty.all(
+                            Colores.fondoSecundario,
+                          ),
+                        ),
                         onPressed: () {
                           //seedCanchasDesdeApp();
                           context.goNamed('registro');
@@ -169,8 +179,8 @@ class Login extends StatelessWidget {
                           'Regístrate',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-
-                            color: Color.fromARGB(255, 20, 122, 73),
+                            fontSize: 15,
+                            color: Colores.fondoPrimario,
                           ),
                         ),
                       ),

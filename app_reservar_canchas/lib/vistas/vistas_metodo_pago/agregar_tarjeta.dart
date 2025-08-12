@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -196,7 +197,7 @@ class _AddCardPageState extends State<AddCardPage> {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFFF9866),
+          backgroundColor: Colores.fondoPrimario,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -213,18 +214,36 @@ class _AddCardPageState extends State<AddCardPage> {
             });
 
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Tarjeta agregada con éxito!')),
+              SnackBar(
+                content: Text(
+                  'Tarjeta agregada con éxito!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colores.textoSecundario,
+                  ),
+                ),
+                backgroundColor: Colores.fondoPrimario,
+              ),
             );
             Navigator.pop(context);
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error al agregar la tarjeta: $e')),
+              SnackBar(
+                content: Text(
+                  'Error al agregar la tarjeta: $e',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colores.textoSecundario,
+                  ),
+                ),
+                backgroundColor: Colores.error,
+              ),
             );
           }
         },
         child: Text(
           'Agregar tarjeta',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 18, color: Colores.textoSecundario),
         ),
       ),
     );

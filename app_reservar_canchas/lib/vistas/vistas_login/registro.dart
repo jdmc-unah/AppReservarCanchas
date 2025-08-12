@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
@@ -87,8 +88,8 @@ class Registro extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 20, 122, 73),
-                      foregroundColor: Colors.white,
+                      backgroundColor: Colores.fondoPrimario,
+                      foregroundColor: Colores.textoSecundario,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

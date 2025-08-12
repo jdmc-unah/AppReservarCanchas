@@ -1,7 +1,7 @@
 import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class filtro_menu_lateral extends StatelessWidget {
   filtro_menu_lateral({super.key});
@@ -19,14 +19,14 @@ class filtro_menu_lateral extends StatelessWidget {
     return SafeArea(
       child: Drawer(
         child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Filtros', style: Theme.of(context).textTheme.titleLarge),
               SizedBox(height: 16),
 
-              // Buscar por nombre
+              //* Buscar por nombre
               Text(
                 'Buscar por nombre',
                 style: Theme.of(context).textTheme.labelLarge,
@@ -35,6 +35,10 @@ class filtro_menu_lateral extends StatelessWidget {
               TextField(
                 controller: controladorTexto,
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colores.fondoPrimario),
+                  ),
                   hintText: 'Ej: Chamaco Guifarro',
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(),
@@ -42,7 +46,7 @@ class filtro_menu_lateral extends StatelessWidget {
               ),
               SizedBox(height: 16),
 
-              // Tipo de deporte
+              //* Tipo de deporte
               Text('Tipo', style: Theme.of(context).textTheme.labelLarge),
               SizedBox(height: 8),
               Obx(() {
@@ -59,12 +63,16 @@ class filtro_menu_lateral extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     ChoiceChip(
+                      selectedColor: Colores.fondoSecundario,
+                      checkmarkColor: Colores.fondoPrimario,
                       label: Text('Todos'),
                       selected: seleccionado == null,
                       onSelected: (_) => filtros.tipo.value = null,
                     ),
                     for (final t in opciones)
                       ChoiceChip(
+                        checkmarkColor: Colores.fondoPrimario,
+                        selectedColor: Colores.fondoSecundario,
                         label: Text(t),
                         selected: seleccionado == t,
                         onSelected: (_) => filtros.tipo.value = t,
@@ -85,6 +93,8 @@ class filtro_menu_lateral extends StatelessWidget {
                       'L. ${filtros.precioMin.value.toStringAsFixed(0)} - L. ${filtros.precioMax.value.toStringAsFixed(0)}',
                     ),
                     RangeSlider(
+                      activeColor: Colores.fondoPrimario,
+                      inactiveColor: Colores.fondoSecundario,
                       min: filtros.limiteMin,
                       max: filtros.limiteMax,
                       values: RangeValues(
@@ -111,6 +121,14 @@ class filtro_menu_lateral extends StatelessWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.all(
+                          Colores.fondoSecundario,
+                        ),
+                        foregroundColor: WidgetStateProperty.all(
+                          Colores.fondoPrimario,
+                        ),
+                      ),
                       onPressed: () {
                         filtros.limpiar();
                         Navigator.of(context).maybePop();
@@ -121,6 +139,14 @@ class filtro_menu_lateral extends StatelessWidget {
                   SizedBox(width: 12),
                   Expanded(
                     child: FilledButton.icon(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.all(
+                          Colores.fondoAlternativo,
+                        ),
+                        backgroundColor: WidgetStateProperty.all(
+                          Colores.fondoPrimario,
+                        ),
+                      ),
                       onPressed: () {
                         // Solo cierra; la pantalla que muestra la lista debe escuchar los cambios de filtros
                         Navigator.of(context).maybePop();

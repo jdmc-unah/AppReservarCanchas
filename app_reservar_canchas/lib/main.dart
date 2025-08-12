@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:app_reservar_canchas/vistas/informacion.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
@@ -10,6 +11,7 @@ import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
 import 'package:app_reservar_canchas/vistas/pagina_inicio.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/login.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/registro.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -19,6 +21,10 @@ import 'package:app_reservar_canchas/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await GetStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.put(ReservasControlador(), permanent: true);
@@ -33,6 +39,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colores.fondoPrimario,
+          selectionColor: Colores.fondoPrimario,
+          selectionHandleColor: Colores.fondoPrimario,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       routerConfig: GoRouter(
         navigatorKey: Get.key,

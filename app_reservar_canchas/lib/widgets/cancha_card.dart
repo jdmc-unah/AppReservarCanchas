@@ -1,14 +1,14 @@
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:app_reservar_canchas/widgets/lista_horas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class CanchaCard extends StatelessWidget {
-  CanchaCard({super.key, required this.canchaId});
+  const CanchaCard({super.key, required this.canchaId});
   final String canchaId;
 
   //List<int> horasSeleccionadas = [];
@@ -19,7 +19,11 @@ class CanchaCard extends StatelessWidget {
 
     return Obx(() {
       if (reservaControlador.canchas.isEmpty) {
-        return Center(child: CircularProgressIndicator());
+        return Center(
+          child: CircularProgressIndicator(
+            color: Color.fromARGB(255, 20, 122, 73),
+          ),
+        );
       }
 
       final cancha = reservaControlador.canchas.firstWhere(
@@ -40,7 +44,10 @@ class CanchaCard extends StatelessWidget {
             children: [
               stackImgNameFav(cancha, context),
 
-              _ubicacionRating(cancha: cancha),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _ubicacionRating(cancha: cancha),
+              ),
 
               ListaHoras(canchaId: canchaId),
               SizedBox(height: 10),
@@ -210,7 +217,12 @@ class _botonReserva extends StatelessWidget {
           },
 
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.lightGreen[300],
+            backgroundColor: Color.fromARGB(
+              255,
+              20,
+              122,
+              73,
+            ), //Colors.lightGreen[300],
             shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -245,7 +257,12 @@ class _botonCalendario extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.lightGreen[300],
+        backgroundColor: Color.fromARGB(
+          255,
+          20,
+          122,
+          73,
+        ), //Colors.lightGreen[300],
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -262,10 +279,25 @@ class _botonCalendario extends StatelessWidget {
       onPressed: () async {
         final reservaControlador = Get.find<ReservasControlador>();
         final nuevaFecha = await showDatePicker(
+          helpText: 'Elige una fecha',
+          confirmText: 'Aceptar',
+          cancelText: 'Cancelar',
           context: context,
           initialDate: DateTime.now().add(Duration(days: 1)),
           firstDate: DateTime.now().add(Duration(days: 1)),
           lastDate: DateTime(2030),
+          builder: (context, child) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                colorScheme: ColorScheme.light(
+                  primary: Color.fromARGB(255, 20, 122, 73),
+                  onPrimary: Colors.white, // Texto sobre el botón
+                  onSurface: Color.fromARGB(255, 20, 122, 73),
+                ),
+              ),
+              child: child!,
+            );
+          },
         );
         if (nuevaFecha != null) {
           reservaControlador.seleccionarFecha(canchaId, nuevaFecha);
@@ -326,7 +358,7 @@ class _ubicacionRating extends StatelessWidget {
             itemSize: 18,
             direction: Axis.horizontal,
             itemBuilder: (context, index) =>
-                Icon(Icons.star, color: Colors.amber),
+                Icon(Icons.star, color: Colores.fondoEstrellas), //Colors.amber
           ),
         ],
       ),
@@ -435,13 +467,22 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("📄 ${cancha.descripcion}"),
+                      Text("📄  ${cancha.descripcion}"),
                       SizedBox(height: 10),
-                      Text("📞 ${cancha.telefono}"),
+                      Text("📞  ${cancha.telefono}"),
                     ],
                   ),
                   actions: [
                     TextButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.all(
+                          Colores.fondoPrimario,
+                        ),
+
+                        foregroundColor: WidgetStateProperty.all(
+                          Color.fromARGB(255, 20, 122, 73),
+                        ),
+                      ),
                       onPressed: () => Navigator.pop(context),
                       child: Text("Cerrar"),
                     ),

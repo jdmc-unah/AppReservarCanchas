@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -49,10 +50,10 @@ class ListaHoras extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Center(
                 child: Text(
-                  'No hay horas disponibles :( \n Porque no mejor otro dia?',
+                  'No hay horarios disponibles :( \n        Prueba elegir otro día',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey[600],
+                    color: Colores.bordeSecundario,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -74,8 +75,10 @@ class ListaHoras extends StatelessWidget {
                   child: ChoiceChip(
                     label: Text("${hora}:00"),
                     selected: isSelected,
+                    labelStyle: TextStyle(color: Colores.fondoComplementoN),
                     onSelected: (_) => controller.accionHora(canchaId, hora),
-                    selectedColor: Colors.green,
+                    selectedColor: Colores.fondoSecundario,
+                    checkmarkColor: Colores.fondoPrimario,
                   ),
                 );
               },

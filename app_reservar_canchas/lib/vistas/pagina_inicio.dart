@@ -1,12 +1,12 @@
 import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/servicios/servicio_firestore.dart';
 import 'package:app_reservar_canchas/widgets/cancha_card.dart';
 import 'package:app_reservar_canchas/widgets/filtro_menu_lateral.dart';
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -52,7 +52,7 @@ class PaginaInicio extends StatelessWidget {
           return Center(
             child: Text(
               'No hay canchas disponibles por el momento.',
-              style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+              style: TextStyle(fontSize: 18, color: Colores.fondoAlternativo),
               textAlign: TextAlign.center,
             ),
           );
