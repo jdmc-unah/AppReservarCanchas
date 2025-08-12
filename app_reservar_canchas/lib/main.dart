@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:app_reservar_canchas/vistas/informacion.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
@@ -20,7 +21,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Get.put(ReservasControlador());
+  Get.put(ReservasControlador(), permanent: true);
+  Get.put(ControladorFiltros(), permanent: true);
 
   runApp(MyApp());
 }

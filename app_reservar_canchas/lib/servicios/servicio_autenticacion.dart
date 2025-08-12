@@ -1,3 +1,4 @@
+import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
 import 'package:app_reservar_canchas/controladores/validaciones_acceso_controlador.dart';
 import 'package:app_reservar_canchas/modelos/usuario.dart';
 import 'package:app_reservar_canchas/servicios/servicio_firestore.dart';
@@ -76,7 +77,11 @@ class AuthService {
 
       //Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
-      if (docId != null) GetStorage().write('usuarioDocId', docId);
+      Get.delete<ReservasControlador>(force: true);
+      Get.put(ReservasControlador());
+
+      await GetStorage().remove('usuarioDocId');
+      if (docId != null) await GetStorage().write('usuarioDocId', docId);
 
       final perfil = await FirestoreService().traerPerfil(correo);
       if (perfil != null) {
@@ -139,7 +144,11 @@ class AuthService {
       final docId = await FirestoreService().usuarioDocIdPorCorreo(
         userData.email!,
       );
-      if (docId != null) GetStorage().write('usuarioDocId', docId);
+      Get.delete<ReservasControlador>(force: true);
+      Get.put(ReservasControlador());
+
+      await GetStorage().remove('usuarioDocId');
+      if (docId != null) await GetStorage().write('usuarioDocId', docId);
       GetStorage().write('usuarioAvatar', userData.photoURL);
       GetStorage().write('usuarioTelefono', usuarioExistente.telefono);
 
@@ -159,10 +168,10 @@ class AuthService {
       await _auth.signOut();
       await GoogleSignIn().signOut(); // Cierra sesión de Google
       // //eliminar data
-      // await GetStorage().remove('usuarioDocId');
+      await GetStorage().remove('usuarioDocId');
       // await GetStorage().remove('usuarioAvatar');
       // GetStorage().write('sesionIniciada', false);
-      GetStorage().erase;
+      await GetStorage().erase();
 
       validacionController.cargando = false;
     } catch (e) {

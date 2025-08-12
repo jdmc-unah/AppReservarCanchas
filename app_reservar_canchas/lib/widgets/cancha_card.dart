@@ -38,7 +38,8 @@ class CanchaCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              stackImgNameFav(cancha),
+              stackImgNameFav(cancha, context),
+
               _ubicacionRating(cancha: cancha),
 
               ListaHoras(canchaId: canchaId),
@@ -364,7 +365,7 @@ class _ubicacionRating extends StatelessWidget {
 //   }
 // }
 
-Stack stackImgNameFav(Cancha cancha) {
+Stack stackImgNameFav(Cancha cancha, BuildContext context) {
   IconData iconoDeporte(String tipo) {
     switch (tipo.toLowerCase()) {
       case 'soccer':
@@ -413,7 +414,44 @@ Stack stackImgNameFav(Cancha cancha) {
         width: double.infinity,
         height: 160,
       ),
-
+      Positioned(
+        top: 8,
+        right: 8,
+        child: IconButton(
+          icon: Icon(Icons.info_outline, color: Colors.white),
+          tooltip: "Información",
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+              Colors.black.withOpacity(0.4),
+            ),
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(cancha.nombre),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("📄 ${cancha.descripcion}"),
+                      SizedBox(height: 10),
+                      Text("📞 ${cancha.telefono}"),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text("Cerrar"),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      ),
       Positioned(
         top: 8,
         left: 8,

@@ -11,6 +11,7 @@ class Cancha {
   final String url;
   final String tipo;
   final String descripcion;
+  final String telefono;
   Cancha({
     required this.id,
     required this.nombre,
@@ -22,6 +23,7 @@ class Cancha {
     required this.url,
     required this.tipo,
     required this.descripcion,
+    required this.telefono,
   });
 
   factory Cancha.fromDoc(DocumentSnapshot documento) {
@@ -56,6 +58,7 @@ class Cancha {
       url: data['url'],
       tipo: data['tipo'],
       descripcion: data['descripcion'],
+      telefono: data['telefono'],
     );
   }
 }
