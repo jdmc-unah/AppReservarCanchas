@@ -204,6 +204,11 @@ class _AddCardPageState extends State<AddCardPage> {
         ),
         onPressed: () async {
           try {
+            //? CAMBIO: Manejar error si los campos estan vacíos
+            final error = validaCampos();
+
+            if (error != null) throw error;
+
             await FirebaseFirestore.instance.collection('tarjetas').add({
               'idUser': GetStorage().read('usuarioDocId'),
               'numero_tarjeta': _cardNumberController.text,
@@ -230,7 +235,7 @@ class _AddCardPageState extends State<AddCardPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Error al agregar la tarjeta: $e',
+                  'Error: $e',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colores.textoSecundario,
@@ -247,6 +252,56 @@ class _AddCardPageState extends State<AddCardPage> {
         ),
       ),
     );
+  }
+
+  String? validaCampos() {
+    final numero = _cardNumberController.text;
+    final titular = _cardHolderController.text;
+    final expiracion = _expiryDateController.text;
+    final cvv = _cvvController.text;
+
+    //*Valida numero
+    if (numero.length != 16) {
+      return 'El número de tarjeta debe tener 16 dígitos';
+    }
+    if (numero == '') {
+      return 'Debe proporcionar el numero de la tarjeta';
+    }
+
+    //*Valida titular
+    if (titular == '') {
+      return 'Debe proporcionar el títular de la tarjeta';
+    }
+
+    //*Valida expiracion
+    if (expiracion == '') {
+      return 'Debe proporcionar la fecha de expiración';
+    }
+
+    final mes = int.parse(expiracion.substring(0, 2));
+    final anio = int.parse(expiracion.substring(3, 5));
+    DateTime fechaActual = DateTime.now();
+
+    if (mes > 12 || mes == 0) {
+      return 'El formato del mes es incorrecto';
+    }
+
+    if (mes < fechaActual.month) {
+      if (anio <= (fechaActual.year % 100)) {
+        return 'La tarjeta está vencida';
+      }
+    }
+
+    if (anio < (fechaActual.year % 100)) {
+      return 'La tarjeta está vencida';
+    }
+
+    //*Valida cvv
+    if (cvv == '') {
+      return 'Debe proporcionar el código de seguridad';
+    }
+
+    return null;
   }
 }
 
