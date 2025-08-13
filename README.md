@@ -1,9 +1,32 @@
-# AppReservarCanchas
+# Book & Play
 
-Aplicación Flutter que permite a usuarios ver canchas disponibles, reservar horarios y revisar sus reservaciones.
+Aplicación móvil diseñada para facilitar la gestión y reserva de canchas deportivas, ofreciendo una experiencia fluida, segura y personalizada. Construida con Flutter y respaldada por los servicios de Firebase, la app permite a los usuarios registrarse, buscar, reservar y pagar por espacios deportivos de forma rápida y confiable.
 
-## Participantes
+## Integrantes
 
 José Daniel Mejía Cuellar - 20212030242  
 Carlos Alfredo Alvarez Colindres - 20222030195  
 Bryan Noé Cruz Izaguirre - 20192000205
+
+## Características
+
+### Servicios Firebase
+
+-Autenticación y registro con correo y contraseña
+-Autenticación con Google
+-Servicio de base de datos Firestore
+
+### Funciones Principales
+
+-Inicio de sesión persistente con GetStorage
+-Listado de Canchas. Actualización de la disponibilidad de las canchas en tiempo real
+-Reservaciones. Horarios específicos dividido por hora, elección de fecha con DatePicker y suma automatica de total a pagar
+-Gestión de métodos de pago. Agregar y eliminar tarjetas para efectuar el pago de la reserva
+-Historial de reservas con estados (disponible, no disponible, estado del pago)
+-Filtros. Busqueda por nombre, tipo de cancha, rango de precio
+-Manejo de errores y excepciones personalizadas
+
+## Requisitos
+
+-Android 6.0 o posterior
+-Acceso a internet
