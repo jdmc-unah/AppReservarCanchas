@@ -58,10 +58,14 @@ class filtro_menu_lateral extends StatelessWidget {
                   'padel',
                   'volleyball',
                 ];
+                //Este widget permite trabajar como de un Row se tratara pero hace saltos de lineas.
+                //Nos muestra los distintos tipos de canchas que se pueden seleccionar en el filtro.
                 return Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
+                    //ChoiceChip como lo dice su nombre se utiliza para elegir una opcion dentro de un conjunto.
+                    //Esta permite poder seleccionar la opcion de Todos
                     ChoiceChip(
                       selectedColor: Colores.fondoSecundario,
                       checkmarkColor: Colores.fondoPrimario,
@@ -69,13 +73,15 @@ class filtro_menu_lateral extends StatelessWidget {
                       selected: seleccionado == null,
                       onSelected: (_) => filtros.tipo.value = null,
                     ),
-                    for (final t in opciones)
+                    //Este permite seleccionar la opcion unica de los tipos, por lo tanto, genera dinamicamente los
+                    //los elementos de la lista opciones.
+                    for (final tipo in opciones)
                       ChoiceChip(
                         checkmarkColor: Colores.fondoPrimario,
                         selectedColor: Colores.fondoSecundario,
-                        label: Text(t),
-                        selected: seleccionado == t,
-                        onSelected: (_) => filtros.tipo.value = t,
+                        label: Text(tipo),
+                        selected: seleccionado == tipo,
+                        onSelected: (_) => filtros.tipo.value = tipo,
                       ),
                   ],
                 );
@@ -116,7 +122,7 @@ class filtro_menu_lateral extends StatelessWidget {
               }),
               Spacer(),
 
-              // Botones
+              // Botones de Limpiar o Aplicar
               Row(
                 children: [
                   Expanded(
@@ -148,7 +154,7 @@ class filtro_menu_lateral extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Solo cierra; la pantalla que muestra la lista debe escuchar los cambios de filtros
+                        // Cierra la pantalla que muestra la lista debe escuchar los cambios de filtros asi que no ocupa algun otro tipo de funcion.
                         Navigator.of(context).maybePop();
                       },
                       icon: Icon(Icons.check),

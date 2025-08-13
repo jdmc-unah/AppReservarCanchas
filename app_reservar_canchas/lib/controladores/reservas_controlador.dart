@@ -5,16 +5,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
+//Controlador de estado para la gestion de canchas y reservas en la app
 class ReservasControlador extends GetxController {
   final canchas = <Cancha>[].obs;
 
   /// horas seleccionadas por canchaId
   final _seleccion = <String, Set<int>>{}.obs;
 
-  /// fecha por canchaId ("YYYY-MM-DD")
+  /// Fecha seleccionada por cada cancha en formato "YYYY-MM-DD".
   final _fecha = <String, String>{}.obs;
+  //Id del documento del usuario
   final usuarioDocId = RxnString();
   late final ControladorFiltros filtros;
+  // Retorna la fecha actual + [dias] en formato "YYYY-MM-DD".
   String _hoyMas(int dias) =>
       DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: dias)));
 
@@ -23,7 +26,7 @@ class ReservasControlador extends GetxController {
     super.onInit();
     usuarioDocId.value = GetStorage().read('usuarioDocId');
     filtros = Get.put(ControladorFiltros());
-    // cargar canchas
+    // Escucha cambios en la lista de canchas desde Firestore.
     FirestoreService.canchasStream().listen((lista) {
       canchas.assignAll(lista);
       // inicializa fecha mínima (mañana) por cancha si no existe
@@ -51,7 +54,7 @@ class ReservasControlador extends GetxController {
     });
   }
 
-  // Lista filtrada en memoria
+  //Devulve la lista de canchas filtradas según nombre, tipo y rango de precio.
   List<Cancha> get canchasFiltradas {
     final q = filtros.textoNombre.value.trim().toLowerCase();
     final tipoSel = filtros.tipo.value;
@@ -69,8 +72,11 @@ class ReservasControlador extends GetxController {
     }).toList();
   }
 
+  //Obtiene la fecha seleccionada para una cancha
   // fecha actual (string YYYY-MM-DD)
   String fechaActual(String canchaId) => _fecha[canchaId] ?? _hoyMas(1);
+
+  // Actualiza la fecha seleccionada para una cancha
   void seleccionarFecha(String canchaId, DateTime dt) {
     _fecha[canchaId] = DateFormat('yyyy-MM-dd').format(dt);
     _fecha.refresh();
@@ -78,8 +84,10 @@ class ReservasControlador extends GetxController {
 
   // selección local
   Set<int> _getSetRO(String id) => _seleccion[id] ?? <int>{};
+  // Retorna la lista de horas seleccionadas para una cancha
   List<int> obtener(String id) => _getSetRO(id).toList()..sort();
 
+  // Agrega o quita una hora de la selección para una cancha
   void accionHora(String canchaId, int hora) {
     final s = _getSetRO(canchaId);
     if (s.contains(hora)) {
@@ -90,16 +98,20 @@ class ReservasControlador extends GetxController {
     _seleccion.refresh();
   }
 
+  // Limpia todas las horas seleccionadas para una cancha
   void limpiar(String canchaId) {
     _seleccion[canchaId] = <int>{};
     _seleccion.refresh();
   }
 
+  // Devuelve un stream con las horas ocupadas de una cancha en la fecha seleccionada
   Stream<Set<int>> horasOcupadasStream(String canchaId) {
     final fecha = fechaActual(canchaId);
     return FirestoreService.horasOcupadasStream(canchaId, fecha);
   }
 
+  // Crea una reserva para un usuario en una cancha con las horas seleccionadas
+  // Retorna un mensaje de error en caso de problema
   Future<String?> reservar({
     required String userId,
     required Cancha cancha,
@@ -126,6 +138,6 @@ class ReservasControlador extends GetxController {
     );
 
     limpiar(cancha.id);
-    return null; // null = ok
+    return null; // null, en este contexto, todo esta bien :)
   }
 }

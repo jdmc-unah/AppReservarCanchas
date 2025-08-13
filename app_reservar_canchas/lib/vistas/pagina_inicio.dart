@@ -13,10 +13,12 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/informacion_usuario.dart';
 
+//Pantalla principal, que muestra la lista de canchas y actualiza al aplicar filtros
+//Ademas al registrar con Google, obliga al usuario a ingresar su numero de telefono.
 class PaginaInicio extends StatelessWidget {
   PaginaInicio({super.key});
 
-  //Ingresar telefono si se registra con google
+  //Servicios y controladores
   final _auth = AuthService();
   final _fire = FirestoreService();
   final _telefono = TextEditingController();
@@ -35,10 +37,13 @@ class PaginaInicio extends StatelessWidget {
         title: Text("Book & Play"),
         centerTitle: true,
         toolbarHeight: 72,
+        //Muestra datos/historial del usuario
         actions: [informacion_usuario()],
       ),
+      //Menu latural con los filtros
       drawer: filtro_menu_lateral(),
       body: Obx(() {
+        //Al estar en Obx, detecta los cambios de los valores en los filtros y reconstruye las canchas a mostrar
         final _ = (
           _filtros.textoNombre.value,
           _filtros.tipo.value,
@@ -46,8 +51,10 @@ class PaginaInicio extends StatelessWidget {
           _filtros.precioMax.value,
           reservaControlador.canchas.length,
         );
+        //Lista filtrada segun el estado del controlador
         final canchas = reservaControlador.canchasFiltradas;
 
+        //Informacion a mostrar en caso de no obtener canchas
         if (canchas.isEmpty) {
           return Center(
             child: Text(
@@ -57,7 +64,7 @@ class PaginaInicio extends StatelessWidget {
             ),
           );
         }
-
+        //Lista de Tarjetas de cancha a mostrar
         return ListView.builder(
           itemCount: canchas.length,
           itemBuilder: (context, index) {
@@ -68,6 +75,7 @@ class PaginaInicio extends StatelessWidget {
     );
   }
 
+  //Solicita el numero de telefono al usuario registrado por Google
   void _actualizarTelefono(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
