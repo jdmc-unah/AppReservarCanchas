@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 class Login extends StatelessWidget {
   Login({super.key});
 
+  //*Instancias de servicios
   final _auth = AuthService();
   final validacionController = Get.put<ValidacionesDeAcceso>(
     ValidacionesDeAcceso(),
@@ -24,6 +25,7 @@ class Login extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
+          //*Imagen de fondo
           Positioned.fill(
             child: Image.asset(
               "assets/imagenes/fondo_login_medio.png",
@@ -34,12 +36,14 @@ class Login extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Obx(() {
               if (validacionController.cargando) {
+                //* Animacion de carga
                 return Center(
                   child: CircularProgressIndicator(
                     color: Colores.fondoPrimario,
                   ),
                 );
               }
+              //* Contenido Login
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,9 +94,10 @@ class Login extends StatelessWidget {
                       onPressed: () async {
                         validacionController.cargando = true;
 
+                        //* Ejecuta el inicio de sesion
                         String? response = await _auth.inicioSesionUsuario(
-                          _correo.text,
-                          _contra.text,
+                          _correo.text.trim(),
+                          _contra.text.trim(),
                         );
 
                         if (!context.mounted) return;
@@ -196,7 +201,7 @@ class Login extends StatelessWidget {
   }
 
   accionesInicioSesion(BuildContext context, String? response) {
-    if (validacionController.error == false) {
+    if (validacionController.error == false && response != null) {
       if (!context.mounted) return;
       GetStorage().write('sesionIniciada', true);
       context.goNamed('inicio');

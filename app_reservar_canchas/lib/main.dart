@@ -52,6 +52,8 @@ class MyApp extends StatelessWidget {
         redirect: (context, state) {
           final sesionIniciada = GetStorage().read('sesionIniciada') ?? false;
           final rutaActual = state.fullPath;
+          print(rutaActual);
+          print(sesionIniciada);
           if (!sesionIniciada && rutaActual == '/inicio') {
             return '/login';
           }

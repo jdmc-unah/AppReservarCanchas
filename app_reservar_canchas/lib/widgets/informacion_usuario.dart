@@ -13,6 +13,8 @@ class informacion_usuario extends StatelessWidget {
     ValidacionesDeAcceso(),
   );
 
+  final avatar = GetStorage().read('usuarioAvatar');
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,18 +23,16 @@ class informacion_usuario extends StatelessWidget {
         child: PopupMenuButton(
           //Siguiente linea: Hace que la lista se desplace hacia abajo y no tapar el MenuBottonS
           position: PopupMenuPosition.under,
-          child: GetStorage().read('usuarioAvatar').toString().length == 1
+          child: avatar.toString().length == 1
               ? CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.blue[50],
-                  child: Text(GetStorage().read('usuarioAvatar')),
+                  child: Text(avatar),
                 )
               : CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.blue[50],
-                  backgroundImage: NetworkImage(
-                    GetStorage().read('usuarioAvatar'),
-                  ),
+                  backgroundImage: NetworkImage(avatar),
                 ),
 
           itemBuilder: (context) => [

@@ -26,7 +26,9 @@ class Registro extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: Obx(() {
           if (validacionController.cargando) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(color: Colores.fondoPrimario),
+            );
           }
           return SafeArea(
             child: ListView(
@@ -99,10 +101,10 @@ class Registro extends StatelessWidget {
 
                       String? response;
                       response = await _auth.registroUsuario(
-                        _nombre.text,
-                        _correo.text,
-                        _telefono.text,
-                        _contra.text,
+                        _nombre.text.trim(),
+                        _correo.text.trim(),
+                        _telefono.text.trim(),
+                        _contra.text.trim(),
                       );
 
                       validacionController.cargando = false;
@@ -114,11 +116,11 @@ class Registro extends StatelessWidget {
                           context,
                           'Has creado tu usuario con éxito!',
                           false,
-                          () {
+                          () async {
                             GetStorage().write('sesionIniciada', true);
-                            _auth.inicioSesionUsuario(
-                              _correo.text,
-                              _contra.text,
+                            await _auth.inicioSesionUsuario(
+                              _correo.text.trim(),
+                              _contra.text.trim(),
                             );
                             context.goNamed('inicio');
                           },

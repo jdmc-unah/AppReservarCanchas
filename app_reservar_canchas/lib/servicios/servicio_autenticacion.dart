@@ -20,6 +20,7 @@ class AuthService {
     String contra,
   ) async {
     try {
+      //* Validaciones internas
       String? errorInterno = ValidacionesDeAcceso.validaRegistro(
         nombre,
         correo,
@@ -32,11 +33,13 @@ class AuthService {
         return errorInterno;
       }
 
+      //* Crea el usuario en firebase con auth
       final cred = await _auth.createUserWithEmailAndPassword(
         email: correo,
         password: contra,
       );
 
+      //* Guarda los datos en firestore
       final usr = Usuario(
         nombre: nombre,
         correo: correo,
@@ -58,7 +61,7 @@ class AuthService {
 
   Future<String> inicioSesionUsuario(String correo, String contra) async {
     try {
-      //Hace validacion interna
+      //* Hace validacion interna
       final errorInterno = ValidacionesDeAcceso.validaInicioSesion(
         correo,
         contra,
@@ -69,13 +72,13 @@ class AuthService {
         return errorInterno;
       }
 
-      //Intenta inicio de sesion
+      //* Intenta inicio de sesion
       final cred = await _auth.signInWithEmailAndPassword(
         email: correo,
         password: contra,
       );
 
-      //Guarda datos usuario
+      //* Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
       Get.delete<ReservasControlador>(force: true);
       Get.put(ReservasControlador());
@@ -98,10 +101,8 @@ class AuthService {
   }
 
   Future<String?> iniciarSesionGoogle() async {
-    //TODO: El telefono lo trae nulo asi que habria que forzar al usuario a actualizar sus datos al iniciar sesion con google antes de hacer reservas
-
     try {
-      //Login por medio de google
+      //*Login por medio de google
       final usuarioGoogle = await GoogleSignIn().signIn();
 
       if (usuarioGoogle == null) return null;
@@ -112,14 +113,14 @@ class AuthService {
         accessToken: googleAuth.accessToken,
       );
 
-      //Trae credenciales proveidas por google
+      //*Trae credenciales proveidas por google
       final userCred = await _auth.signInWithCredential(cred);
 
-      //Guarda la data del usuario
+      //*Guarda la data del usuario
       final userData = userCred.user;
       if (userData == null) return null;
 
-      //Verifica si ya se tiene guardada la data del usuario en firestore
+      //*Verifica si ya se tiene guardada la data del usuario en firestore
       Usuario? usuarioExistente = await FirestoreService().traerPerfil(
         userData.email,
       );
@@ -132,7 +133,7 @@ class AuthService {
               ? int.parse(userCred.user!.phoneNumber!)
               : null,
         );
-
+        //* Guarda datos en firestore
         final responseFireStore = await FirestoreService().guardaPerfil(
           newUser,
         );
@@ -140,13 +141,13 @@ class AuthService {
         usuarioExistente = newUser;
       }
 
-      //Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(
         userData.email!,
       );
       Get.delete<ReservasControlador>(force: true);
       Get.put(ReservasControlador());
 
+      //* Guarda datos localmente
       await GetStorage().remove('usuarioDocId');
       if (docId != null) await GetStorage().write('usuarioDocId', docId);
       GetStorage().write('usuarioAvatar', userData.photoURL);
@@ -167,12 +168,8 @@ class AuthService {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut(); // Cierra sesión de Google
-      // //eliminar data
       await GetStorage().remove('usuarioDocId');
-      // await GetStorage().remove('usuarioAvatar');
-      // GetStorage().write('sesionIniciada', false);
       await GetStorage().erase();
-
       validacionController.cargando = false;
     } catch (e) {
       print('ERROR AL SALIR DE LA APP');

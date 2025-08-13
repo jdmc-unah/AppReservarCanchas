@@ -6,16 +6,13 @@ class ValidacionesDeAcceso extends GetxController {
   //*Variables globales para validar error
 
   final _error = true.obs;
-
   set error(bool hayError) {
     _error.value = hayError;
   }
 
   bool get error => _error.value;
 
-  //*
   final _cargando = false.obs;
-
   set cargando(bool estaCargando) {
     _cargando.value = estaCargando;
   }
