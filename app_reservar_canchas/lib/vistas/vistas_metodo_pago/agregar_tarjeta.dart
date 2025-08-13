@@ -42,7 +42,7 @@ class _AddCardPageState extends State<AddCardPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: Colores.textoPrimario),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('Método de pago'),

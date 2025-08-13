@@ -134,7 +134,7 @@ class PaginaInicio extends StatelessWidget {
                         action: null,
                         content: Text(
                           'Los datos han sido actualizados',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colores.textoSecundario),
                         ),
                       ),
                     );

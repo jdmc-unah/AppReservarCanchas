@@ -1,4 +1,5 @@
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
+import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class PaymentMethodsPage extends StatelessWidget {
   void _showSnackBar(
     BuildContext context,
     String message, {
-    Color color = Colors.black,
+    Color color = Colores.textoPrimario,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -35,13 +36,13 @@ class PaymentMethodsPage extends StatelessWidget {
       _showSnackBar(
         context,
         'Debe seleccionar una tarjeta.',
-        color: Colors.red,
+        color: Colores.error,
       );
     } else {
       _showSnackBar(
         context,
         'El pago a sido realizado con exito.',
-        color: Colors.green,
+        color: Colores.fondoPrimario,
       );
 
       final ReservasControlador reservasControlador =
@@ -100,13 +101,13 @@ class PaymentMethodsPage extends StatelessWidget {
         _showSnackBar(
           context,
           'Tarjeta eliminada con éxito!',
-          color: Colors.green,
+          color: Colores.fondoPrimario,
         );
       } catch (e) {
         _showSnackBar(
           context,
           'Error al eliminar la tarjeta: $e',
-          color: Colors.red,
+          color: Colores.error,
         );
       }
     }
@@ -117,7 +118,7 @@ class PaymentMethodsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: Colores.textoPrimario),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -215,7 +216,7 @@ class PaymentMethodsPage extends StatelessWidget {
                                 child: IconButton(
                                   icon: const Icon(
                                     Icons.delete,
-                                    color: Colors.white,
+                                    color: Colores.textoSecundario,
                                   ),
                                   onPressed: () => _deleteCard(context, docId),
                                 ),
@@ -252,7 +253,7 @@ class PaymentMethodsPage extends StatelessWidget {
         ),
         child: const Row(
           children: [
-            Icon(Icons.add_circle_outline, color: Colors.black),
+            Icon(Icons.add_circle_outline, color: Colores.textoPrimario),
             SizedBox(width: 10),
             Text(
               'Agregar tarjeta',
@@ -270,7 +271,7 @@ class PaymentMethodsPage extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFF9866),
+          backgroundColor: Colores.fondoPrimario,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -278,7 +279,7 @@ class PaymentMethodsPage extends StatelessWidget {
         onPressed: () => _handlePayment(context),
         child: const Text(
           'Pagar',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 18, color: Colores.textoSecundario),
         ),
       ),
     );

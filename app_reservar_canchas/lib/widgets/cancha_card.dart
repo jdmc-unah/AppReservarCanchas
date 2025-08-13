@@ -476,11 +476,11 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
                     TextButton(
                       style: ButtonStyle(
                         overlayColor: WidgetStateProperty.all(
-                          Colores.fondoPrimario,
+                          Colores.fondoSecundario,
                         ),
 
                         foregroundColor: WidgetStateProperty.all(
-                          Color.fromARGB(255, 20, 122, 73),
+                          Colores.fondoPrimario,
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),
@@ -499,18 +499,22 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.black54,
+            color: Colores.fondoComplementoN,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(iconoDeporte(cancha.tipo), size: 14, color: Colors.white),
+              Icon(
+                iconoDeporte(cancha.tipo),
+                size: 14,
+                color: Colores.textoSecundario,
+              ),
               SizedBox(width: 6),
               Text(
                 textoTipo(cancha.tipo),
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colores.textoSecundario,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -526,7 +530,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.transparent, Colors.black],
+            colors: [Colors.transparent, Colores.textoPrimario],
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16),
@@ -542,7 +546,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colores.textoSecundario,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -551,7 +555,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
             Text(
               'LPS ${cancha.precio.toPrecision(2)}',
               style: TextStyle(
-                color: Colors.white,
+                color: Colores.textoSecundario,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
