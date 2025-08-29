@@ -107,6 +107,7 @@ class PaginaInicio extends StatelessWidget {
                     } catch (e) {
                       ValidacionesDeAcceso.mostrarSnackBar(
                         context,
+                        'Cerrar',
                         'El telefono debe ser solo numeros ',
                         true,
                         () {},
@@ -117,6 +118,7 @@ class PaginaInicio extends StatelessWidget {
                     if (_telefono.text.length != 8) {
                       ValidacionesDeAcceso.mostrarSnackBar(
                         context,
+                        'Cerrar',
                         'El telefono debe ser de 8 digitos ',
                         true,
                         () {},

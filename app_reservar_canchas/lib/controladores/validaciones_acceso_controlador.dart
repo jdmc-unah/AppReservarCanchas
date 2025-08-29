@@ -82,6 +82,7 @@ class ValidacionesDeAcceso extends GetxController {
 
   static void mostrarSnackBar(
     BuildContext context,
+    String btnLabel,
     String mensaje,
     bool esError,
     VoidCallback accion,
@@ -90,7 +91,7 @@ class ValidacionesDeAcceso extends GetxController {
       SnackBar(
         backgroundColor: esError ? Colores.error : Colores.fondoPrimario,
         action: SnackBarAction(
-          label: esError ? 'Cerrar' : 'Entrar a la aplicación',
+          label: btnLabel,
           textColor: Colores.textoSecundario,
           onPressed: accion,
         ),

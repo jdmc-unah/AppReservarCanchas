@@ -1,9 +1,12 @@
 import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
 import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
+import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/vistas/informacion.dart';
+import 'package:app_reservar_canchas/vistas/vistas_login/verificacion_correo.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/pagina_pago.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_reservar_canchas/controladores/reservas_controlador.dart';
@@ -34,7 +37,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +56,20 @@ class MyApp extends StatelessWidget {
         navigatorKey: Get.key,
         redirect: (context, state) {
           final sesionIniciada = GetStorage().read('sesionIniciada') ?? false;
+
+          final correoVerificado =
+              FirebaseAuth.instance.currentUser?.emailVerified ?? false;
           final rutaActual = state.fullPath;
 
           if (!sesionIniciada && rutaActual == '/inicio') {
             return '/login';
           }
+
+          if (!correoVerificado && rutaActual == '/inicio') {
+            return '/verificacioncorreo';
+          }
+
+          return null;
         },
         initialLocation: '/inicio',
         routes: [
@@ -76,6 +90,11 @@ class MyApp extends StatelessWidget {
                 builder: (context, state) => Registro(),
               ),
             ],
+          ),
+          GoRoute(
+            name: 'verificacioncorreo',
+            path: '/verificacioncorreo',
+            builder: (context, state) => VerificacionCorreo(),
           ),
 
           GoRoute(

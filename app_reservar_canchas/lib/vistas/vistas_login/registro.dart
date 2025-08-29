@@ -4,7 +4,6 @@ import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class Registro extends StatelessWidget {
@@ -114,14 +113,16 @@ class Registro extends StatelessWidget {
 
                         ValidacionesDeAcceso.mostrarSnackBar(
                           context,
+                          'Verificar correo',
                           'Has creado tu usuario con éxito!',
                           false,
                           () async {
-                            GetStorage().write('sesionIniciada', true);
                             await _auth.inicioSesionUsuario(
                               _correo.text.trim(),
                               _contra.text.trim(),
                             );
+
+                            if (!context.mounted) return;
                             context.goNamed('inicio');
                           },
                         );
@@ -129,6 +130,7 @@ class Registro extends StatelessWidget {
                         if (!context.mounted) return;
                         ValidacionesDeAcceso.mostrarSnackBar(
                           context,
+                          'Cerrar',
                           response,
                           true,
                           () {},

@@ -211,7 +211,13 @@ class Login extends StatelessWidget {
 
       if (response == null) return;
 
-      ValidacionesDeAcceso.mostrarSnackBar(context, response, true, () {});
+      ValidacionesDeAcceso.mostrarSnackBar(
+        context,
+        'Cerrar',
+        response,
+        true,
+        () {},
+      );
     }
   }
 }
