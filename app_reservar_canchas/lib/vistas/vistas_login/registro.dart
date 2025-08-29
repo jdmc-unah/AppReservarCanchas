@@ -123,7 +123,7 @@ class Registro extends StatelessWidget {
                             );
 
                             if (!context.mounted) return;
-                            context.goNamed('inicio');
+                            context.goNamed('verificacioncorreo');
                           },
                         );
                       } else {

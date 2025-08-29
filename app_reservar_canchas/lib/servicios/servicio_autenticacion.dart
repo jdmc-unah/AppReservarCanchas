@@ -48,6 +48,10 @@ class AuthService {
         password: contra,
       );
 
+      if (cred.user != null) {
+        await cred.user!.updateDisplayName(nombre);
+      }
+
       //* Guarda los datos en firestore
       final usr = Usuario(
         nombre: nombre,
@@ -86,6 +90,8 @@ class AuthService {
         email: correo,
         password: contra,
       );
+
+      GetStorage().write('sesionIniciada', true);
 
       //* Guarda datos usuario
       final docId = await FirestoreService().usuarioDocIdPorCorreo(correo);
@@ -213,6 +219,10 @@ class AuthService {
         break;
       case 'account-exists-with-different-credential':
         error = 'ERROR: La cuenta existe con otro tipo de autenticación';
+        break;
+      case 'too-many-requests':
+        error =
+            'ERROR: Demasiadas solicitudes, espere unos minutos y vuelva a intentar';
         break;
       default:
         error = 'ERROR: Algo salió mal :(';

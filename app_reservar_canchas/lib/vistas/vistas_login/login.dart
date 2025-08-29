@@ -203,7 +203,6 @@ class Login extends StatelessWidget {
   accionesInicioSesion(BuildContext context, String? response) {
     if (validacionController.error == false && response != null) {
       if (!context.mounted) return;
-      GetStorage().write('sesionIniciada', true);
       context.goNamed('inicio');
     } else {
       validacionController.cargando = false;

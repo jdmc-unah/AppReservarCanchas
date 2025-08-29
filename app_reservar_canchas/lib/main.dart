@@ -1,7 +1,6 @@
 import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
 import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
-import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/vistas/informacion.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/verificacion_correo.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
@@ -37,9 +36,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final _auth = AuthService();
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
