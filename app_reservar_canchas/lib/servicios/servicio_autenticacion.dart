@@ -20,7 +20,7 @@ class AuthService {
     String contra,
   ) async {
     try {
-      //* Validaciones internas
+      //* Validaciones internas //
       String? errorInterno = ValidacionesDeAcceso.validaRegistro(
         nombre,
         correo,
