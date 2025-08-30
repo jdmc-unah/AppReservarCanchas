@@ -13,6 +13,15 @@ class AuthService {
     ValidacionesDeAcceso(),
   );
 
+  Future<String?> enviarReinicioContra(String correo) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: correo);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return manejaExepcionFireBase(e.code);
+    }
+  }
+
   Future<String?> enviarCorreoVerificacion() async {
     try {
       await _auth.currentUser?.sendEmailVerification();

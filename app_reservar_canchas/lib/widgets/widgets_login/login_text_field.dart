@@ -32,18 +32,22 @@ class _LoginTextFieldState extends State<LoginTextField> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Text(
-                widget.topText,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '*',
-                style: TextStyle(color: const Color.fromARGB(255, 228, 21, 6)),
-              ),
-            ],
-          ),
+          child: widget.topText == ''
+              ? null
+              : Row(
+                  children: [
+                    Text(
+                      widget.topText,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '*',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 228, 21, 6),
+                      ),
+                    ),
+                  ],
+                ),
         ),
 
         TextField(

@@ -4,7 +4,6 @@ import 'package:app_reservar_canchas/servicios/servicio_autenticacion.dart';
 import 'package:app_reservar_canchas/widgets/widgets_login/login_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class Login extends StatelessWidget {
@@ -80,7 +79,22 @@ class Login extends StatelessWidget {
                     controller: _contra,
                   ),
 
-                  SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        context.goNamed('reiniciocontra');
+                      },
+                      child: Text(
+                        '¿Olvidaste tu contraseña?',
+                        style: TextStyle(
+                          color: Colores.fondoPrimario,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

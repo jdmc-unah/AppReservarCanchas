@@ -2,6 +2,7 @@ import 'package:app_reservar_canchas/controladores/filtro_controlador.dart';
 import 'package:app_reservar_canchas/estilos/colores.dart';
 import 'package:app_reservar_canchas/modelos/cancha.dart';
 import 'package:app_reservar_canchas/vistas/informacion.dart';
+import 'package:app_reservar_canchas/vistas/vistas_login/reiniciar_contra.dart';
 import 'package:app_reservar_canchas/vistas/vistas_login/verificacion_correo.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/agregar_tarjeta.dart';
 import 'package:app_reservar_canchas/vistas/vistas_metodo_pago/pagina_pago.dart';
@@ -85,6 +86,11 @@ class MyApp extends StatelessWidget {
                 name: 'registro',
                 path: '/registro',
                 builder: (context, state) => Registro(),
+              ),
+              GoRoute(
+                name: 'reiniciocontra',
+                path: '/reiniciocontra',
+                builder: (context, state) => ReiniciarContra(),
               ),
             ],
           ),
