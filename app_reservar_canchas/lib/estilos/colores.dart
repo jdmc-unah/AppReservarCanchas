@@ -10,5 +10,6 @@ class Colores {
   static const Color fondoComplementoN = Color.fromARGB(128, 0, 0, 0);
   static const Color fondoComplementoB = Colors.white70;
   static const Color error = Colors.red;
+  static const Color errorComplemento = Color.fromARGB(192, 244, 67, 54);
   static const Color bordeSecundario = Color.fromARGB(255, 117, 117, 117);
 }

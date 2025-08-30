@@ -91,7 +91,7 @@ class PaginaInicio extends StatelessWidget {
                 children: [
                   LoginTextField(
                     topText: 'Ingresa tu telefono para continuar',
-                    hintText: '99999999',
+                    hintText: '',
                     prefixIcon: Icons.phone,
                     controller: _telefono,
                   ),
@@ -99,14 +99,28 @@ class PaginaInicio extends StatelessWidget {
               ),
               actions: [
                 TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colores.error),
+                  ),
                   onPressed: () {
                     _auth.cerrarSesion();
                     context.goNamed('login');
                   },
-                  child: Text('Salir'),
+                  child: Text(
+                    'Salir',
+                    style: TextStyle(color: Colores.textoSecundario),
+                  ),
                 ),
                 TextButton(
-                  child: Text('Aceptar'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                      Colores.fondoPrimario,
+                    ),
+                  ),
+                  child: Text(
+                    'Aceptar',
+                    style: TextStyle(color: Colores.textoSecundario),
+                  ),
                   onPressed: () async {
                     //Valida telefono
                     int tel;
@@ -138,6 +152,7 @@ class PaginaInicio extends StatelessWidget {
                     await _fire.actualizarTelefono(tel);
                     GetStorage().write('usuarioTelefono', tel);
 
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Color.fromARGB(255, 20, 122, 73),
@@ -149,6 +164,7 @@ class PaginaInicio extends StatelessWidget {
                       ),
                     );
 
+                    if (!context.mounted) return;
                     Navigator.of(context).pop();
                   },
                 ),

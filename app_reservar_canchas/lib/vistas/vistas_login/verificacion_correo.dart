@@ -57,62 +57,73 @@ class _VerificacionCorreoState extends State<VerificacionCorreo> {
             );
           }
           return SafeArea(
-            child: SizedBox(
-              height: 500,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Correo de Verificación',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 30),
-
-                  Text(
-                    'Revisa tu bandeja de correo y sigue los pasos para continuar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 30),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colores.fondoPrimario,
-                        foregroundColor: Colores.textoSecundario,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            child: Center(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Correo de Verificación',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () async {
-                        enviarCorreo();
-                      },
-                      child: Text('Enviar de nuevo'),
-                    ),
-                  ),
+                      // SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Divider(),
+                      ),
+                      Text(
+                        'Revisa tu bandeja de correo y sigue los pasos para continuar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: 30),
 
-                  SizedBox(height: 10),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colores.error,
-                        foregroundColor: Colores.textoSecundario,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colores.fondoPrimario,
+                            foregroundColor: Colores.textoSecundario,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () async {
+                            enviarCorreo();
+                          },
+                          child: Text('Enviar de nuevo'),
                         ),
                       ),
-                      onPressed: () async {
-                        timer.cancel();
-                        _auth.cerrarSesion();
-                        context.goNamed('login');
-                      },
-                      child: Text('Usar otra cuenta'),
-                    ),
+
+                      SizedBox(height: 10),
+
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colores.error,
+                            foregroundColor: Colores.textoSecundario,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () async {
+                            timer.cancel();
+                            _auth.cerrarSesion();
+                            context.goNamed('login');
+                          },
+                          child: Text('Usar otra cuenta'),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
@@ -128,12 +139,13 @@ class _VerificacionCorreoState extends State<VerificacionCorreo> {
 
     validacionController.cargando = false;
 
-    print(validacionController.cargando);
+    if (!context.mounted) return;
+    BuildContext contexto = context;
 
     if (response == null) {
       if (!context.mounted) return;
       ValidacionesDeAcceso.mostrarSnackBar(
-        context,
+        contexto,
         'Cerrar',
         'El correo de verificacion se envio con éxito',
         false,
@@ -142,7 +154,7 @@ class _VerificacionCorreoState extends State<VerificacionCorreo> {
     } else {
       if (!context.mounted) return;
       ValidacionesDeAcceso.mostrarSnackBar(
-        context,
+        contexto,
         'Cerrar',
         response,
         true,
