@@ -137,6 +137,8 @@ class AuthService {
         accessToken: googleAuth.accessToken,
       );
 
+      GetStorage().write('sesionIniciada', true);
+
       //*Trae credenciales proveidas por google
       final userCred = await _auth.signInWithCredential(cred);
 
