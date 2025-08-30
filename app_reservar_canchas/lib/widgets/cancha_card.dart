@@ -164,7 +164,8 @@ class CanchaCard extends StatelessWidget {
 //     );
 //   }
 // }
-
+//Funcionalidad del botonReserva; redireciona al apartado de pago, para asi simular la validacion
+//de pago antes de subir la reserba al FirebaseFireStore
 class _botonReserva extends StatelessWidget {
   const _botonReserva({
     super.key,
@@ -248,6 +249,7 @@ class _botonReserva extends StatelessWidget {
   }
 }
 
+//Logica del DatePicker
 class _botonCalendario extends StatelessWidget {
   const _botonCalendario({super.key, required this.canchaId});
 
@@ -308,6 +310,7 @@ class _botonCalendario extends StatelessWidget {
   }
 }
 
+//Muestra la fecha actual por defecto y en caso de que el usuario elija otra fecha, esta se muestra
 class _fechaActualTxt extends StatelessWidget {
   const _fechaActualTxt({
     super.key,
@@ -330,6 +333,7 @@ class _fechaActualTxt extends StatelessWidget {
   }
 }
 
+//Retorna la ubicacion y Rating
 class _ubicacionRating extends StatelessWidget {
   _ubicacionRating({required this.cancha});
   Cancha cancha;
@@ -397,7 +401,9 @@ class _ubicacionRating extends StatelessWidget {
 //   }
 // }
 
+//Este devuelve el stack de la imagen con la informacion que sobresale sobre la imagen.
 Stack stackImgNameFav(Cancha cancha, BuildContext context) {
+  //switch-case para la visualizacion del icono
   IconData iconoDeporte(String tipo) {
     switch (tipo.toLowerCase()) {
       case 'soccer':
@@ -414,6 +420,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
     return Icons.sports;
   }
 
+  //switch-case para la visualizacion del tipo(texto)
   String textoTipo(String tipo) {
     switch (tipo.toLowerCase()) {
       case 'soccer':
@@ -430,13 +437,14 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
     return tipo;
   }
 
+  //Se define un valor en URL en basedatos la cual, se debe de colocar en caso de no tener una URl
   String imgUrl = cancha.url;
   const kDefaultCanchaImg =
       "https://media.istockphoto.com/id/1176735816/photo/blue-tennis-court-and-illuminated-indoor-arena-with-fans-upper-front-view.jpg?s=1024x1024&w=is&k=20&c=u4i72shR1eXzojkcsVRPf4HdqakcOg2Mo0ucuaFtvXo=";
   if (imgUrl == "urlpaginaweb") {
     imgUrl = kDefaultCanchaImg;
   }
-  //Widget stack permite poder sobreponer un widget sobre otro; como lo podemos suponer por su nombre.
+  //Widget stack permite sobreponer un widget sobre otro; como lo podemos suponer por su nombre.
   return Stack(
     alignment: Alignment.bottomLeft,
     children: [
@@ -449,6 +457,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
       Positioned(
         top: 8,
         right: 8,
+        //IconoButton para mostrar la informacion de la cancha.
         child: IconButton(
           icon: Icon(Icons.info_outline, color: Colors.white),
           tooltip: "Información",
@@ -467,9 +476,41 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("📄  ${cancha.descripcion}"),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.description),
+                          SizedBox(width: 3),
+                          Expanded(
+                            child: Text(
+                              "${cancha.descripcion}",
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 10),
-                      Text("📞  ${cancha.telefono}"),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.location_pin),
+                          SizedBox(width: 3),
+                          Expanded(
+                            child: Text("${cancha.ubicacion}", softWrap: true),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.phone),
+                          SizedBox(width: 3),
+                          Expanded(
+                            child: Text("${cancha.telefono}", softWrap: true),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                   actions: [
@@ -493,6 +534,7 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
           },
         ),
       ),
+      //Muestra el tipo de cancha
       Positioned(
         top: 8,
         left: 8,
@@ -523,9 +565,10 @@ Stack stackImgNameFav(Cancha cancha, BuildContext context) {
           ),
         ),
       ),
+      //Muestra el nombre y el precio
       Container(
-        width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,

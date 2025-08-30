@@ -44,7 +44,7 @@ class PaymentMethodsPage extends StatelessWidget {
         'El pago a sido realizado con exito.',
         color: Colores.fondoPrimario,
       );
-
+      //Una vez todo validado sube la reserva a la base de datos
       final ReservasControlador reservasControlador =
           Get.find<ReservasControlador>();
       final error = await reservasControlador.reservar(
@@ -65,7 +65,6 @@ class PaymentMethodsPage extends StatelessWidget {
         ),
       );
     }
-    //Logica de la reserva luego del pago:
   }
 
   Future<void> _deleteCard(BuildContext context, String docId) async {

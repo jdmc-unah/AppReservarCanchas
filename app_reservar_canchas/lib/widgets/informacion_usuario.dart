@@ -20,6 +20,7 @@ class informacion_usuario extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
+        //El wiget PopupMenuButton nos permite mostrar un menu emergente al presionar el boton.
         child: PopupMenuButton(
           //Siguiente linea: Hace que la lista se desplace hacia abajo y no tapar el MenuBottonS
           position: PopupMenuPosition.under,
@@ -36,11 +37,13 @@ class informacion_usuario extends StatelessWidget {
                 ),
 
           itemBuilder: (context) => [
+            //Al presionar redigire a la pantalla informacion
             PopupMenuItem(
               value: 0,
               child: Text("Informacion"),
               onTap: () => context.pushNamed('informacion'),
             ),
+            //Al presionar cierra la sesion del usuario
             PopupMenuItem(
               value: 0,
               child: Text("Cerrar Sesión"),

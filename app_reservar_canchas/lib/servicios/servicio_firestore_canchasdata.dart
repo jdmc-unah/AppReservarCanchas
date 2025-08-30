@@ -70,9 +70,7 @@ class FirestoreService {
     //Agregar horas en /canchas/{id}/fechas/{fecha}
     final agendaRef = _db.doc('canchas/$canchaId/fechas/$fecha');
     await agendaRef.set({
-      'horasReservadas': {
-        for (final h in horas) '$h': userId, //
-      },
+      'horasReservadas': {for (final h in horas) '$h': userId},
     }, SetOptions(merge: true));
   }
 
@@ -80,7 +78,7 @@ class FirestoreService {
   static Future<void> liberarHoras({
     required String canchaId,
     required String fecha, // "YYYY-MM-DD"
-    required List<int> horas, // ej: [10,11]
+    required List<int> horas,
   }) async {
     final ref = _db.doc('canchas/$canchaId/fechas/$fecha');
     final updates = {
@@ -97,7 +95,7 @@ class FirestoreService {
     required int horaInicio,
     required int horaFin,
     required double precio,
-    required double rating, // <-- el modelo espera 'rating'
+    required double rating,
     String? url,
     String? descripcion,
   }) async {
@@ -110,7 +108,7 @@ class FirestoreService {
       'horaInicio': horaInicio,
       'horaFin': horaFin,
       'precio': precio,
-      'rating': rating, // <-- clave alineada con tu modelo
+      'rating': rating,
       'url': url ?? 'urlpaginaweb',
       'descripcion': descripcion ?? '',
     });
