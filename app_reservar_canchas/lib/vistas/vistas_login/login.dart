@@ -82,8 +82,14 @@ class Login extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStatePropertyAll(
+                          Colores.fondoSecundario,
+                        ),
+                      ),
                       onPressed: () {
-                        context.goNamed('reiniciocontra');
+                        // context.goNamed('reiniciocontra');
+                        reiniciarContra(context);
                       },
                       child: Text(
                         '¿Olvidaste tu contraseña?',
@@ -214,6 +220,8 @@ class Login extends StatelessWidget {
     );
   }
 
+  //* Metodos
+
   accionesInicioSesion(BuildContext context, String? response) {
     if (validacionController.error == false && response != null) {
       if (!context.mounted) return;
@@ -232,5 +240,89 @@ class Login extends StatelessWidget {
         () {},
       );
     }
+  }
+
+  reiniciarContra(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: true,
+          child: AlertDialog(
+            title: Column(
+              children: [
+                Text(
+                  'Reiniciar contraseña',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Divider(),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Por favor ingresa tu correo para establecer una nueva contraseña',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+
+                LoginTextField(
+                  prefixIcon: Icons.email_outlined,
+                  topText: '',
+                  hintText: 'micorreo@dominio.com',
+                  activarSuffix: false,
+                  controller: _correo,
+                ),
+              ],
+            ),
+            actions: [
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colores.fondoPrimario,
+                    foregroundColor: Colores.textoSecundario,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () async {
+                    String? response = await _auth.enviarReinicioContra(
+                      _correo.text,
+                    );
+
+                    if (!context.mounted) return;
+                    context.pop();
+
+                    if (response == null) {
+                      if (!context.mounted) return;
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        'OK',
+                        'El correo se envió con éxito',
+                        false,
+                        () {},
+                      );
+                    } else {
+                      if (!context.mounted) return;
+                      ValidacionesDeAcceso.mostrarSnackBar(
+                        context,
+                        'OK',
+                        response,
+                        true,
+                        () {},
+                      );
+                    }
+                  },
+                  child: Text('Enviar'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
